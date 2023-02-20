@@ -1,0 +1,37 @@
+body {
+    color: #f2f2f2;
+    font-family: 'Roboto', Arial;
+    background-color: #1e1f22;
+    background-image: url('/assets/blob.svg');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: fit-content;
+    background-color: #111214;
+    border-radius: 2px;
+    box-shadow: 1px 1px 15px #02020254;
+    padding: 18px;
+}
+
+.bi-bug {
+    font-size: 34px;
+    color: #bd5959;
+}
+
+.bi-patch-check {
+    font-size: 34px;
+    color: #4f92d1;
+}
