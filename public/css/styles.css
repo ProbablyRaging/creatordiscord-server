@@ -35,3 +35,21 @@ p {
     font-size: 34px;
     color: #4f92d1;
 }
+
+.discord-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 22px;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 100px;
+    background-color: #23242a;
+    color: #e5e5e5;
+    border: none;
+    cursor: pointer;
+}
+
+.discord-btn:hover {
+    filter: brightness(1.1);
+}

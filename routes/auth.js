@@ -64,15 +64,14 @@ router.get('/redirect', (req, res, next) => {
 
 router.get('/proceed', async (req, res) => {
     if (!req.user) {
-        res.redirect('/error', { message: 'Unknown error' });
+        res.render('/error');
         return;
-    } else {
-        res.redirect(`/auth/success?user=${req.user.id}`);
     }
+    res.redirect(`/auth/success?user=${req.user.id}`);
 });
 
 router.get('/success', async (req, res) => {
-    res.render('success', { message: 'Successfully Authenticated. You can close this window now.' });
+    res.render('success', { message: 'Successfully authenticated. You can close this window now' });
 });
 
 module.exports = router;
