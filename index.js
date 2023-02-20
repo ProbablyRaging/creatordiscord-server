@@ -6,10 +6,13 @@ const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const startTimers = require('./js/timers');
 const path = require('path');
 
 // Connect to database
-mongodb.then(() => console.log('Connected to database')).catch(err => console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err));
+mongodb.then(() => { console.log('Connected to database') }).catch(err => console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err));
+
+startTimers();
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -39,9 +42,11 @@ app.set('views', [
 // Routes
 const auth = require('./routes/auth');
 const error = require('./routes/error');
+const success = require('./routes/success');
 const api = require('./routes/api');
 app.use('/auth', auth);
 app.use('/error', error);
+app.use('/success', success);
 app.use('/api', api);
 
 app.listen(port, () => {

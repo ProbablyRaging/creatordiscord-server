@@ -9,10 +9,6 @@ const usersSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    tokens: {
-        type: Number,
-        required: false
-    },
     accessToken: {
         type: String,
         required: true
@@ -24,6 +20,18 @@ const usersSchema = mongoose.Schema({
     expires: {
         type: String,
         required: true
+    },
+    tokens: {
+        type: Number,
+        required: false
+    },
+    tokenCap: {
+        type: Number,
+        required: false
+    },
+    limit: {
+        type: String,
+        required: false
     }
 });
 

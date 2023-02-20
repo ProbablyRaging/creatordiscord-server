@@ -4,8 +4,8 @@ router.get('/', async (req, res) => {
     res.render('error', { message: 'An unknown error occurred' });
 });
 
-router.get('/noresponse', async (req, res) => {
-    res.render('error', { message: 'Did not authenticate in time' });
+router.get('/queuefinished', async (req, res) => {
+    res.render('error', { message: `` });
 });
 
 router.get('/emptyqueue', async (req, res) => {
