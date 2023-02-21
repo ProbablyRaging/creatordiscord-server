@@ -26,6 +26,27 @@ p {
     padding: 18px;
 }
 
+.sub-text {
+    font-size: 13px;
+    margin-top: 44px;
+}
+
+button {
+    margin-top: 16px;
+    background-color: #273b5a;
+    width: 122px;
+    height: 32px;
+    border: none;
+    border-radius: 100px;
+    color: #e1e1e1;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    filter: brightness(1.2);
+}
+
 .bi-bug {
     font-size: 34px;
     color: #bd5959;
