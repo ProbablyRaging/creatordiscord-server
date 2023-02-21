@@ -4,6 +4,10 @@ router.get('/', async (req, res) => {
     res.render('error', { message: 'An unknown error occurred' });
 });
 
+router.get('/inputdetected', async (req, res) => {
+    res.render('error', { message: `Blocked input detected on queue window` });
+});
+
 router.get('/queuefinished', async (req, res) => {
     res.render('error', { message: `` });
 });

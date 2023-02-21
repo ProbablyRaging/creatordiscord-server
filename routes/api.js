@@ -65,7 +65,7 @@ router.post('/submitvideoid', async (req, res) => {
         }
     } catch (err) {
         // If an error occurs, return an error response and log the error
-        res.send({ error: 'Unknown error occurred' });
+        res.send({ error: 'An error occurred' });
         console.error('There was a problem: ', err);
     }
 });
@@ -93,6 +93,7 @@ router.post('/addtokens', async (req, res) => {
         }
 
     } catch (err) {
+        res.send({ error: 'An error occurred' });
         console.error('There was a problem : ', err);
     }
 });
@@ -106,6 +107,22 @@ router.get('/videolist', async (req, res) => {
             res.send({ videoList: result.videoIds });
         }
     } catch (err) {
+        console.error('There was a problem : ', err);
+    }
+});
+
+router.post('/logout', async (req, res) => {
+    try {
+        extUsers.updateOne({
+            userId: req.body.userId
+        },{
+            expires: 0
+        },{
+            upsert: true
+        }).exec();
+        res.send({ message: 'Successfull' });
+    } catch (err) {
+        res.send({ error: 'An error occurred' });
         console.error('There was a problem : ', err);
     }
 });
