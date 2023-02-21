@@ -82,7 +82,7 @@ router.post('/addtokens', async (req, res) => {
         // If user has reached daily cap, return
         const currentTokens = !userResult.tokens ? 0 : userResult.tokens;
         const currentTokenCap = !userResult.tokenCap ? 0 : userResult.tokenCap;
-        if (userResult.tokenCap >= 5) {
+        if (userResult.tokenCap >= 10) {
             res.send({ message: 'Daily tokens cap reached' });
             return;
         } else {
