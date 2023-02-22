@@ -13,7 +13,7 @@ router.post('/getuser', async (req, res) => {
 
 router.post('/submitvideoid', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
             // Fetch the YouTube video page and If the video is unavailable or private,
             //return an error response and exit the function
@@ -65,7 +65,7 @@ router.post('/submitvideoid', async (req, res) => {
 
 router.get('/videolist', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
             const results = await videoList.find().sort({ watches: 1 });
             if (results.length < 1) {
@@ -89,7 +89,7 @@ router.get('/videolist', async (req, res) => {
 
 router.post('/addtokens', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
             // Fetch the user and add the appropriate amount of tokens
             const userResult = await extUsers.findOne({ userId: req.body.userId });
@@ -121,7 +121,7 @@ router.post('/addtokens', async (req, res) => {
 
 router.post('/addwatch', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
             // Fetch the video data and increment the watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
@@ -143,7 +143,7 @@ router.post('/addwatch', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
             extUsers.updateOne({
                 userId: req.body.userId
