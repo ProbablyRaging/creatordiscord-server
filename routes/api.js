@@ -133,7 +133,7 @@ router.post('/addwatch', async (req, res) => {
             ).exec();
             // Fetch the user's data and increment the watch count
             const userResult = await extUsers.findOne({ userId: req.body.userId });
-            const currentUserWatches = !userResult.watches ? 0 : userResult.watches;
+            const currentUserWatches = !userResult?.watches ? 0 : userResult?.watches;
             extUsers.updateOne(
                 { userId: req.body.userId },
                 { watches: currentUserWatches + req.body.amount },
