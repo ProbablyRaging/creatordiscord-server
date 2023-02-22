@@ -64,7 +64,7 @@ router.get('/redirect', (req, res, next) => {
 
 router.get('/proceed', async (req, res) => {
     if (!req.user) {
-        res.render('/error');
+        res.render('error');
         return;
     }
     res.redirect(`/auth/success?user=${req.user.id}`);
