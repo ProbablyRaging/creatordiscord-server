@@ -32,6 +32,14 @@ const usersSchema = mongoose.Schema({
     limit: {
         type: String,
         required: false
+    },
+    views: {
+        type: Number,
+        required: false
+    },
+    submissions: {
+        type: Number,
+        required: false
     }
 });
 
