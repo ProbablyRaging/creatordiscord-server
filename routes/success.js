@@ -1,7 +1,9 @@
 const router = require('express').Router();
 
-router.get('/queuefinished', async (req, res) => {
-    res.render('success', { message: `End of queue` });
+router.get('/', async (req, res) => {
+    const { message } = req.query;
+    const defaultMessage = '';
+    res.render('success', { message: message || defaultMessage });
 });
 
 module.exports = router;

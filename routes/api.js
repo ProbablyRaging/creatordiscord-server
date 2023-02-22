@@ -67,7 +67,7 @@ router.get('/videolist', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && origin.includes(process.env.API_KEY)) {
         try {
-            const results = await videoList.find().sort({ watches: 1 });;
+            const results = await videoList.find().sort({ watches: 1 });
             if (results.length < 1) {
                 res.send({ error: 'No videos in queue' });
             } else {

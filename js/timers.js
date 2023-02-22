@@ -5,7 +5,10 @@ const extUsers = require('../schema/users');
 module.exports = async () => {
     // Clear video list
     const clearVideoList = new cronjob('0 0 * * *', async function () {
-        await videoList.deleteMany({});
+        const results = await videoList.find().sort({ watches: -1 });;
+        for (let i = 0; i < results.length - 5; i++) {
+            await videoList.deleteOne({ _id: results[i]._id });
+        }
     });
     clearVideoList.start();
     // Reset token caps

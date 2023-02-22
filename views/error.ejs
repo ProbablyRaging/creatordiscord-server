@@ -11,8 +11,9 @@
     <div class="container">
         <i class="bi bi-bug"></i>
         <p class="message"><%= message %></p>
-        <p class="sub-text">You must join the Discord server to use this app</p>
-        <button>Join Now</button>
+        <% if (message.includes('must be a Discord server member')) { %>
+        <button onclick="location.href = 'https://discord.gg/forthecontent'">Join Now</button>
+        <% } %>
     </div>
 </body>
 
