@@ -131,6 +131,14 @@ router.post('/addwatch', async (req, res) => {
                 { watches: currentWatches + req.body.amount },
                 { upsert: true }
             ).exec();
+            // Fetch the user's data and increment the watch count
+            const userResult = await extUsers.findOne({ userId: req.body.userId });
+            const currentUserWatches = !userResult.watches ? 0 : userResult.watches;
+            extUsers.updateOne(
+                { userId: req.body.userId },
+                { watches: currentUserWatches + req.body.amount },
+                { upsert: true }
+            ).exec();
             res.send({ message: 'Watch added' });
         } catch (err) {
             res.send({ error: 'An error occurred' });
