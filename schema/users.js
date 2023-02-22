@@ -40,6 +40,10 @@ const usersSchema = mongoose.Schema({
     submissions: {
         type: Number,
         required: false
+    },
+    watches: {
+        type: Number,
+        required: false
     }
 });
 
