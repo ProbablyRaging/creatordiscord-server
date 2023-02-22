@@ -5,15 +5,10 @@ const { msToHours } = require('../js/utils');
 const fetch = require('node-fetch');
 
 router.post('/getuser', async (req, res) => {
-    const origin = req.headers?.origin;
-    if (origin && origin.includes(process.env.API_KEY)) {
-        // Fetch a user and return the results
-        const result = await extUsers.findOne({ userId: req.body.userId });
-        if (result) res.send({ "result": result });
-        if (!result) res.send({ "result": false });
-    } else {
-        res.send({ message: 'Access denied' });
-    }
+    // Fetch a user and return the results
+    const result = await extUsers.findOne({ userId: req.body.userId });
+    if (result) res.send({ "result": result });
+    if (!result) res.send({ "result": false });
 });
 
 router.post('/submitvideoid', async (req, res) => {
