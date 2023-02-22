@@ -72,10 +72,12 @@ router.get('/videolist', async (req, res) => {
                 res.send({ error: 'No videos in queue' });
             } else {
                 let videoData = [];
+                let watchCount = 0;
                 results.forEach(result => {
                     videoData.push(result.videoId);
+                    watchCount = watchCount + result.watches;
                 });
-                res.send({ videoList: videoData });
+                res.send({ videoList: videoData, watchCount: watchCount });
             }
         } catch (err) {
             console.error('There was a problem : ', err);
