@@ -15,6 +15,8 @@ router.post('/submitvideoid', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
+            // Additional formatting of video id to prevent errors
+            req.body.videoId = req.body.videoId.replace(/&\S*|&$/g, '');
             // Fetch the YouTube video page and If the video is unavailable or private,
             //return an error response and exit the function
             const resolve = await fetch(`https://www.youtube.com/watch?v=${req.body.videoId}`);
