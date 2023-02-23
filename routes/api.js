@@ -123,7 +123,7 @@ router.post('/addwatch', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
-            // Fetch the video data and increment the watch count
+            // Update the videos watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
             const currentWatches = !videoResult.watches ? 0 : videoResult.watches;
             videoList.updateOne(
@@ -131,9 +131,17 @@ router.post('/addwatch', async (req, res) => {
                 { watches: currentWatches + req.body.amount },
                 { upsert: true }
             ).exec();
-            // Fetch the user's data and increment the watch count
-            const userResult = await extUsers.findOne({ userId: req.body.userId });
-            const currentUserWatches = !userResult?.watches ? 0 : userResult?.watches;
+            // Update the watchee's view count
+            const watcheeResult = await extUsers.findOne({ userId: videoResult.userId });
+            const currentViews = !watcheeResult.views ? 0 : watcheeResult.views;
+            extUsers.updateOne(
+                { userId: videoResult.userId },
+                { views: currentViews + req.body.amount },
+                { upsert: true }
+            ).exec();
+            // Update the watcher's watch count
+            const watcherResult = await extUsers.findOne({ userId: req.body.userId });
+            const currentUserWatches = !watcherResult?.watches ? 0 : watcherResult?.watches;
             extUsers.updateOne(
                 { userId: req.body.userId },
                 { watches: currentUserWatches + req.body.amount },
