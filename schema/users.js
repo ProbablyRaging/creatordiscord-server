@@ -44,6 +44,14 @@ const usersSchema = mongoose.Schema({
     watches: {
         type: Number,
         required: false
+    },
+    prevSubmissions: {
+        type: Number,
+        required: false
+    },
+    prevViews: {
+        type: Number,
+        required: false
     }
 });
 
