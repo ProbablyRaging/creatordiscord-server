@@ -157,6 +157,30 @@ router.post('/addwatch', async (req, res) => {
     }
 });
 
+router.post('/addlike', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            // Fetch the liked video's data
+            const videoResult = await videoList.findOne({ videoId: req.body.videoId });
+            // Update the watchee's view count
+            const userResult = await extUsers.findOne({ userId: videoResult.userId });
+            const currentLikes = !userResult.likes ? 0 : userResult.likes;
+            extUsers.updateOne(
+                { userId: videoResult.userId },
+                { likes: currentLikes + req.body.amount },
+                { upsert: true }
+            ).exec();
+            res.send({ message: 'Like added' });
+        } catch (err) {
+            res.send({ error: 'An error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
 router.post('/logout', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {

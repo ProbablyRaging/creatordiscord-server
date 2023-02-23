@@ -37,6 +37,10 @@ const usersSchema = mongoose.Schema({
         type: Number,
         required: false
     },
+    likes: {
+        type: Number,
+        required: false
+    },
     submissions: {
         type: Number,
         required: false
