@@ -78,7 +78,7 @@ router.get('/videolist', async (req, res) => {
                 results.forEach(result => {
                     // TODO: before update
                     // videoData.push({ videoId: result.videoId, watches: result.watches, userId: result.userId });
-                    videoData.push(result.videoId + '&t=0');
+                    videoData.push(result.videoId);
                     watchCount = watchCount + result.watches;
                 });
                 res.send({ videoList: videoData, watchCount: watchCount });
