@@ -13,6 +13,10 @@ const videoListSchema = mongoose.Schema({
         type: Number,
         required: false
     },
+    expires: {
+        type: String,
+        required: false
+    }
 });
 
 module.exports = mongoose.model('videolists', videoListSchema)

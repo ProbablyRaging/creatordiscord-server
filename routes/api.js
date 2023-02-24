@@ -44,7 +44,8 @@ router.post('/submitvideoid', async (req, res) => {
                     videoList.create({
                         userId: req.body.userId,
                         videoId: req.body.videoId,
-                        watches: 0
+                        watches: 0,
+                        expires: new Date().valueOf() + oneDay
                     });
                     // Update the user's tokens, daily limit timestamp, and submission count
                     extUsers.updateOne(

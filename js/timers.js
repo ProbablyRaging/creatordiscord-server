@@ -4,18 +4,17 @@ const extUsers = require('../schema/users');
 
 module.exports = async () => {
     // Update user stats and clear video list
-    const clearVideoList = new cronjob('0 0 * * *', async function () {
-        // Delete all but 5 videos
-        const videosToDelete = await videoList.find().sort({ watches: -1 });
-        const videoDeletionPromises = [];
-        for (let i = 0; i < videosToDelete.length - 5; i++) {
-            videoDeletionPromises.push(
-                videoList.deleteOne({ _id: videosToDelete[i]._id })
-            );
+    const removeExpiredVideos = new cronjob('*/10 * * * *', async function () {
+        const videoResults = await videoList.find();
+        // Make sure there are always 5 videos in the queue
+        if (videoResults.length <= 5) return;
+        for (const data of videoResults) {
+            if (new Date().valueOf() > data.expires) {
+                await videoList.deleteOne({ videoId: data.videoId });
+            }
         }
-        await Promise.all(videoDeletionPromises);
     });
-    clearVideoList.start();
+    removeExpiredVideos.start();
 
     // Reset token caps
     const resetTokenCaps = new cronjob('0 0 * * *', async function () {
