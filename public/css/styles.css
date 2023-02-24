@@ -18,12 +18,15 @@ p {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 350px;
+    width: fit-content;
     height: fit-content;
+    max-width: 600px;
+    overflow-wrap: anywhere;
     background-color: #111214;
     border-radius: 2px;
     box-shadow: 1px 1px 15px #02020254;
     padding: 18px;
+    margin: 0 40px;
 }
 
 .sub-text {

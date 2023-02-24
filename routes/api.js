@@ -11,6 +11,8 @@ router.post('/getuser', async (req, res) => {
     if (!result) res.send({ "result": false });
 });
 
+// TODO before update
+// router.post('/addvideo', async (req, res) => {
 router.post('/submitvideoid', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
@@ -32,6 +34,7 @@ router.post('/submitvideoid', async (req, res) => {
             if (!videoResult) {
                 // Fetch the user's data
                 const userResult = await extUsers.findOne({ userId: req.body.userId });
+                const currentSubmissions = !userResult.submissions ? 0 : userResult.submissions;
                 // Check if the user reached their daily limit
                 if (new Date().valueOf() < userResult.limit) {
                     res.send({ error: `You must wait ${msToHours(userResult.limit)}` });
@@ -43,10 +46,10 @@ router.post('/submitvideoid', async (req, res) => {
                         videoId: req.body.videoId,
                         watches: 0
                     });
-                    // Update the user's daily limit timestamp
+                    // Update the user's tokens, daily limit timestamp, and submission count
                     extUsers.updateOne(
                         { userId: req.body.userId },
-                        { tokens: userResult.tokens - 5, limit: new Date().valueOf() + oneDay },
+                        { tokens: userResult.tokens - 5, limit: new Date().valueOf() + oneDay, submissions: currentSubmissions + 1 },
                         { upsert: true }
                     ).exec();
                     res.send({ message: 'Successfully added to the queue' });
