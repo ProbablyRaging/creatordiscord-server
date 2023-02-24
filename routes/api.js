@@ -11,9 +11,7 @@ router.post('/getuser', async (req, res) => {
     if (!result) res.send({ "result": false });
 });
 
-// TODO before update
-// router.post('/addvideo', async (req, res) => {
-router.post('/submitvideoid', async (req, res) => {
+router.post('/addvideo', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
@@ -28,36 +26,31 @@ router.post('/submitvideoid', async (req, res) => {
                 return;
             }
             // Fetch the video data
-            const videoResult = await videoList.findOne({ videoId: req.body.videoId });
+            const videoResult = await videoList.findOne({ userId: req.body.userId });
             const oneDay = 24 * 60 * 60 * 1000;
             // Create an entry if the video doesn't exist in the queue yet
             if (!videoResult) {
                 // Fetch the user's data
                 const userResult = await extUsers.findOne({ userId: req.body.userId });
                 const currentSubmissions = !userResult.submissions ? 0 : userResult.submissions;
-                // Check if the user reached their daily limit
-                if (new Date().valueOf() < userResult.limit) {
-                    res.send({ error: `You must wait ${msToHours(userResult.limit)}` });
-                    return;
-                } else {
-                    // If the users hasn't reached their daily limit
-                    videoList.create({
-                        userId: req.body.userId,
-                        videoId: req.body.videoId,
-                        watches: 0,
-                        expires: new Date().valueOf() + oneDay
-                    });
-                    // Update the user's tokens, daily limit timestamp, and submission count
-                    extUsers.updateOne(
-                        { userId: req.body.userId },
-                        { tokens: userResult.tokens - 5, limit: new Date().valueOf() + oneDay, submissions: currentSubmissions + 1 },
-                        { upsert: true }
-                    ).exec();
-                    res.send({ message: 'Successfully added to the queue' });
-                }
+                // If the users hasn't reached their daily limit
+                videoList.create({
+                    userId: req.body.userId,
+                    videoId: req.body.videoId,
+                    watches: 0,
+                    expires: new Date().valueOf() + oneDay
+                });
+                // Update the user's tokens, daily limit timestamp, and submission count
+                extUsers.updateOne(
+                    { userId: req.body.userId },
+                    { tokens: userResult.tokens - 5, submissions: currentSubmissions + 1 },
+                    { upsert: true }
+                ).exec();
+                res.send({ message: 'Successfully added to the queue' });
+
             } else {
                 // If the video already exists in the queue
-                res.send({ error: `Already in the queue` });
+                res.send({ error: `You already have a video in the queue` });
             }
         } catch (err) {
             // If an error occurs, return an error response and log the error
@@ -80,9 +73,7 @@ router.get('/videolist', async (req, res) => {
                 let videoData = [];
                 let watchCount = 0;
                 results.forEach(result => {
-                    // TODO: before update
-                    // videoData.push({ videoId: result.videoId, watches: result.watches, userId: result.userId });
-                    videoData.push(result.videoId);
+                    videoData.push({ videoId: result.videoId, watches: result.watches, userId: result.userId, expires: result.expires });
                     watchCount = watchCount + result.watches;
                 });
                 res.send({ videoList: videoData, watchCount: watchCount });

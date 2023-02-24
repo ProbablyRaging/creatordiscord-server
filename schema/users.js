@@ -29,10 +29,6 @@ const usersSchema = mongoose.Schema({
         type: Number,
         required: false
     },
-    limit: {
-        type: String,
-        required: false
-    },
     views: {
         type: Number,
         required: false
