@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const extUsers = require('../schema/users');
 const videoList = require('../schema/video-list');
-const { msToHours } = require('../js/utils');
 const fetch = require('node-fetch');
 
 router.post('/getuser', async (req, res) => {
@@ -32,7 +31,7 @@ router.post('/addvideo', async (req, res) => {
             if (!videoResult) {
                 // Fetch the user's data
                 const userResult = await extUsers.findOne({ userId: req.body.userId });
-                const currentSubmissions = !userResult.submissions ? 0 : userResult.submissions;
+                const currentSubmissions = !userResult?.submissions ? 0 : userResult.submissions;
                 videoList.create({
                     userId: req.body.userId,
                     videoId: req.body.videoId,
@@ -93,7 +92,7 @@ router.post('/addtokens', async (req, res) => {
             const userResult = await extUsers.findOne({ userId: req.body.userId });
             // If user has reached daily cap, return
             const currentTokens = !userResult.tokens ? 0 : userResult.tokens;
-            const currentTokenCap = !userResult.tokenCap ? 0 : userResult.tokenCap;
+            const currentTokenCap = !userResult?.tokenCap ? 0 : userResult.tokenCap;
             if (userResult.tokenCap >= 5) {
                 res.send({ message: 'Daily tokens cap reached' });
                 return;
@@ -123,7 +122,7 @@ router.post('/addwatch', async (req, res) => {
         try {
             // Update the videos watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
-            const currentWatches = !videoResult.watches ? 0 : videoResult.watches;
+            const currentWatches = !videoResult?.watches ? 0 : videoResult.watches;
             videoList.updateOne(
                 { videoId: req.body.videoId },
                 { watches: currentWatches + req.body.amount },
@@ -131,7 +130,7 @@ router.post('/addwatch', async (req, res) => {
             ).exec();
             // Update the watchee's view count
             const watcheeResult = await extUsers.findOne({ userId: videoResult.userId });
-            const currentViews = !watcheeResult.views ? 0 : watcheeResult.views;
+            const currentViews = !watcheeResult?.views ? 0 : watcheeResult.views;
             extUsers.updateOne(
                 { userId: videoResult.userId },
                 { views: currentViews + req.body.amount },
@@ -163,7 +162,7 @@ router.post('/addlike', async (req, res) => {
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
             // Update the watchee's view count
             const userResult = await extUsers.findOne({ userId: videoResult.userId });
-            const currentLikes = !userResult.likes ? 0 : userResult.likes;
+            const currentLikes = !userResult?.likes ? 0 : userResult.likes;
             extUsers.updateOne(
                 { userId: videoResult.userId },
                 { likes: currentLikes + req.body.amount },
