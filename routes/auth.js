@@ -2,6 +2,20 @@ const router = require('express').Router();
 const passport = require('passport');
 const discordStrategy = require('passport-discord').Strategy;
 const extUsers = require('../schema/users');
+const fetch = require('node-fetch');
+
+async function addRoleToUser(userId) {
+    try {
+        await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${userId}/roles/${process.env.PING_ROLE}`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `${process.env.API_TOKEN}`
+            }
+        });
+    } catch (err) {
+        console.log('There was a problem : ', err);
+    }
+}
 
 passport.serializeUser((user, done) => {
     done(null, user);
@@ -33,6 +47,8 @@ passport.use(new discordStrategy({
             refreshToken: refreshToken,
             expires: expires
         });
+        // Give the user the extension ping role in the server
+        addRoleToUser(profile.id);
         done(null, profile);
     } else {
         const newEntry = await extUsers.create({
@@ -46,6 +62,8 @@ passport.use(new discordStrategy({
             limit: null
         });
         await newEntry.save();
+        // Give the user the extension ping role in the server
+        addRoleToUser(profile.id);
         done(null, profile);
     }
 }));

@@ -33,14 +33,13 @@ router.post('/addvideo', async (req, res) => {
                 // Fetch the user's data
                 const userResult = await extUsers.findOne({ userId: req.body.userId });
                 const currentSubmissions = !userResult.submissions ? 0 : userResult.submissions;
-                // If the users hasn't reached their daily limit
                 videoList.create({
                     userId: req.body.userId,
                     videoId: req.body.videoId,
                     watches: 0,
                     expires: new Date().valueOf() + oneDay
                 });
-                // Update the user's tokens, daily limit timestamp, and submission count
+                // Update the user's tokens and submission count
                 extUsers.updateOne(
                     { userId: req.body.userId },
                     { tokens: userResult.tokens - 5, submissions: currentSubmissions + 1 },
