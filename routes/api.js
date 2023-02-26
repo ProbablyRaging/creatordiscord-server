@@ -20,7 +20,7 @@ router.post('/addvideo', async (req, res) => {
             //return an error response and exit the function
             const resolve = await fetch(`https://www.youtube.com/watch?v=${req.body.videoId}`);
             const response = await resolve.text();
-            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
+            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`) || req.body.videoId.length < 5) {
                 res.send({ error: `Video is private, unavailable or doesn't exist` });
                 return;
             }
@@ -123,27 +123,27 @@ router.post('/addwatch', async (req, res) => {
             // Update the videos watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
             const currentWatches = !videoResult?.watches ? 0 : videoResult.watches;
-            videoList.updateOne(
+            await videoList.updateOne(
                 { videoId: req.body.videoId },
                 { watches: currentWatches + req.body.amount },
-                { upsert: true }
-            ).exec();
+                { upsert: false }
+            );
             // Update the watchee's view count
             const watcheeResult = await extUsers.findOne({ userId: videoResult.userId });
             const currentViews = !watcheeResult?.views ? 0 : watcheeResult.views;
-            extUsers.updateOne(
+            await extUsers.updateOne(
                 { userId: videoResult.userId },
                 { views: currentViews + req.body.amount },
                 { upsert: true }
-            ).exec();
+            );
             // Update the watcher's watch count
             const watcherResult = await extUsers.findOne({ userId: req.body.userId });
             const currentUserWatches = !watcherResult?.watches ? 0 : watcherResult?.watches;
-            extUsers.updateOne(
+            await extUsers.updateOne(
                 { userId: req.body.userId },
                 { watches: currentUserWatches + req.body.amount },
                 { upsert: true }
-            ).exec();
+            );
             res.send({ message: 'Watch added' });
         } catch (err) {
             res.send({ error: 'An error occurred' });
