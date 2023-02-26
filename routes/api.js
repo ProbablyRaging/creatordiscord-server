@@ -140,7 +140,7 @@ router.post('/addwatch', async (req, res) => {
             await extUsers.updateOne(
                 { userId: videoResult.userId },
                 { views: currentViews + req.body.amount },
-                { upsert: true }
+                { upsert: false }
             );
             // Update the watcher's watch count
             const watcherResult = await extUsers.findOne({ userId: req.body.userId });
@@ -148,7 +148,7 @@ router.post('/addwatch', async (req, res) => {
             await extUsers.updateOne(
                 { userId: req.body.userId },
                 { watches: currentUserWatches + req.body.amount },
-                { upsert: true }
+                { upsert: false }
             );
             res.send({ message: 'Watch added' });
         } catch (err) {
