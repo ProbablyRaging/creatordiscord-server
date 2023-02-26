@@ -17,7 +17,8 @@ router.post('/addvideo', async (req, res) => {
             // Additional formatting of video id to prevent errors
             req.body.videoId = req.body.videoId.replace(/&\S*|&$/g, '');
             // If not a valid youtube video ID
-            if (!regex.test(/^[a-zA-Z0-9_-]{11}$/) || req.body.videoId.length !== 11) {
+            const regex = /^[a-zA-Z0-9_-]{11}$/;
+            if (!regex.test(req.body.videoId) || req.body.videoId.length !== 11) {
                 res.send({ error: 'Not a valid video ID' });
                 return;
             }
