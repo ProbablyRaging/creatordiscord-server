@@ -16,11 +16,16 @@ router.post('/addvideo', async (req, res) => {
         try {
             // Additional formatting of video id to prevent errors
             req.body.videoId = req.body.videoId.replace(/&\S*|&$/g, '');
+            // If not a valid youtube video ID
+            if (!regex.test(/^[a-zA-Z0-9_-]{11}$/) || req.body.videoId.length !== 11) {
+                res.send({ error: 'Not a valid video ID' });
+                return;
+            }
             // Fetch the YouTube video page and If the video is unavailable or private,
             //return an error response and exit the function
             const resolve = await fetch(`https://www.youtube.com/watch?v=${req.body.videoId}`);
             const response = await resolve.text();
-            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`) || req.body.videoId.length < 5) {
+            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
                 res.send({ error: `Video is private, unavailable or doesn't exist` });
                 return;
             }
