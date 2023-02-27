@@ -129,7 +129,8 @@ router.post('/addwatch', async (req, res) => {
         try {
             // Update the videos watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
-            const currentWatches = !videoResult?.watches ? 0 : videoResult.watches;
+            if (!videoResult) return;
+            const currentWatches = !videoResult?.watches ? 0 : videoResult?.watches;
             await videoList.updateOne(
                 { videoId: req.body.videoId },
                 { watches: currentWatches + req.body.amount },
@@ -137,7 +138,7 @@ router.post('/addwatch', async (req, res) => {
             );
             // Update the watchee's view count
             const watcheeResult = await extUsers.findOne({ userId: videoResult.userId });
-            const currentViews = !watcheeResult?.views ? 0 : watcheeResult.views;
+            const currentViews = !watcheeResult?.views ? 0 : watcheeResult?.views;
             await extUsers.updateOne(
                 { userId: videoResult.userId },
                 { views: currentViews + req.body.amount },
