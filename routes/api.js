@@ -58,7 +58,7 @@ router.post('/addvideo', async (req, res) => {
             }
         } catch (err) {
             // If an error occurs, return an error response and log the error
-            res.send({ error: 'An error occurred' });
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem: ', err);
         }
     } else {
@@ -83,6 +83,7 @@ router.get('/videolist', async (req, res) => {
                 res.send({ videoList: videoData, watchCount: watchCount });
             }
         } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem : ', err);
         }
     } else {
@@ -114,7 +115,7 @@ router.post('/addtokens', async (req, res) => {
                 res.send({ message: 'Tokens added' });
             }
         } catch (err) {
-            res.send({ error: 'An error occurred' });
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem : ', err);
         }
     } else {
@@ -152,7 +153,7 @@ router.post('/addwatch', async (req, res) => {
             );
             res.send({ message: 'Watch added' });
         } catch (err) {
-            res.send({ error: 'An error occurred' });
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem : ', err);
         }
     } else {
@@ -176,7 +177,7 @@ router.post('/addlike', async (req, res) => {
             ).exec();
             res.send({ message: 'Like added' });
         } catch (err) {
-            res.send({ error: 'An error occurred' });
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem : ', err);
         }
     } else {
@@ -197,7 +198,7 @@ router.post('/logout', async (req, res) => {
             }).exec();
             res.send({ message: 'Successfull' });
         } catch (err) {
-            res.send({ error: 'An error occurred' });
+            res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem : ', err);
         }
     } else {
