@@ -167,6 +167,7 @@ router.post('/addlike', async (req, res) => {
         try {
             // Fetch the liked video's data
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
+            if (!videoResult) return;
             // Update the watchee's view count
             const userResult = await extUsers.findOne({ userId: videoResult.userId });
             const currentLikes = !userResult?.likes ? 0 : userResult.likes;
