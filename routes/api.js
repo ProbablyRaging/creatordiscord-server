@@ -1,3 +1,4 @@
+const { getYoutubeVideoId } = require('../js/utils');
 const router = require('express').Router();
 const extUsers = require('../schema/users');
 const videoList = require('../schema/video-list');
@@ -14,47 +15,45 @@ router.post('/addvideo', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
-            // Additional formatting of video id to prevent errors
-            req.body.videoId = req.body.videoId.replace(/&\S*|&$/g, '');
-            // If not a valid youtube video ID
-            const regex = /^[a-zA-Z0-9_-]{11}$/;
-            if (!regex.test(req.body.videoId) || req.body.videoId.length !== 11) {
-                res.send({ error: 'Not a valid video ID' });
-                return;
-            }
-            // Fetch the YouTube video page and If the video is unavailable or private,
-            //return an error response and exit the function
-            const resolve = await fetch(`https://www.youtube.com/watch?v=${req.body.videoId}`);
-            const response = await resolve.text();
-            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
-                res.send({ error: `Video is private, unavailable or doesn't exist` });
-                return;
-            }
-            // Fetch the video data
-            const videoResult = await videoList.findOne({ userId: req.body.userId });
-            const oneDay = 24 * 60 * 60 * 1000;
-            // Create an entry if the video doesn't exist in the queue yet
-            if (!videoResult) {
-                // Fetch the user's data
-                const userResult = await extUsers.findOne({ userId: req.body.userId });
-                const currentSubmissions = !userResult?.submissions ? 0 : userResult.submissions;
-                videoList.create({
-                    userId: req.body.userId,
-                    videoId: req.body.videoId,
-                    watches: 0,
-                    expires: new Date().valueOf() + oneDay
-                });
-                // Update the user's tokens and submission count
-                extUsers.updateOne(
-                    { userId: req.body.userId },
-                    { tokens: userResult.tokens - 5, submissions: currentSubmissions + 1 },
-                    { upsert: true }
-                ).exec();
-                res.send({ message: 'Successfully added to the queue' });
+            // Get the video ID from the submitted URL or string
+            const videoId = getYoutubeVideoId(req.body.videoId);
+            if (videoId) {
+                // Fetch the YouTube video page and If the video is unavailable or private,
+                //return an error response and exit the function
+                const resolve = await fetch(`https://www.youtube.com/watch?v=${videoId}`);
+                const response = await resolve.text();
+                if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
+                    res.send({ error: `Video is private, unavailable, or doesn't exist` });
+                    return;
+                }
+                // Fetch the video data
+                const hasVideoInQueue = await videoList.findOne({ userId: req.body.userId });
+                const oneDay = 24 * 60 * 60 * 1000;
+                // Create an entry if the video doesn't exist in the queue yet
+                if (!hasVideoInQueue) {
+                    // Fetch the user's data
+                    const userResult = await extUsers.findOne({ userId: req.body.userId });
+                    const currentSubmissions = !userResult?.submissions ? 0 : userResult.submissions;
+                    videoList.create({
+                        userId: req.body.userId,
+                        videoId: videoId,
+                        watches: 0,
+                        expires: new Date().valueOf() + oneDay
+                    });
+                    // Update the user's tokens and submission count
+                    extUsers.updateOne(
+                        { userId: req.body.userId },
+                        { tokens: userResult.tokens - 5, submissions: currentSubmissions + 1 },
+                        { upsert: true }
+                    ).exec();
+                    res.send({ message: 'Successfully added to the queue' });
 
+                } else {
+                    // If the video already exists in the queue
+                    res.send({ error: `You already have a video in the queue` });
+                }
             } else {
-                // If the video already exists in the queue
-                res.send({ error: `You already have a video in the queue` });
+                res.send({ error: `Not a valid video URL or ID` });
             }
         } catch (err) {
             // If an error occurs, return an error response and log the error
