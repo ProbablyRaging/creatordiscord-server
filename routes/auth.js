@@ -32,7 +32,7 @@ passport.use(new discordStrategy({
     scope: ['identify', 'guilds'],
 }, async (accessToken, refreshToken, profile, done) => {
     // Check if user is in the server or not, return if not
-    const isInGuild = profile.guilds.some(guild => guild.id === process.env.GUILD_ID);
+    const isInGuild = profile.guilds && profile.guilds.some(guild => guild.id === process.env.GUILD_ID);
     if (!isInGuild) return done(null, null);
     // Check if user entry exists, update or create
     const entryExists = await extUsers.findOne({ userId: profile.id });
