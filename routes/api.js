@@ -209,7 +209,7 @@ router.post('/sendnotification', async (req, res) => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        content: `**Extension Notification** \n> You are eligible to submit a new video \n\n*Disable notifictions via the extension's settings*`
+                        content: `**Extension Notification** \n> You are eligible to submit a new video \n\n*Disable notifications via the extension's settings menu*`
                     })
                 });
             }
