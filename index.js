@@ -49,10 +49,6 @@ app.use('/error', error);
 app.use('/success', success);
 app.use('/api', api);
 
-setInterval(() => {
-    console.log('testing');
-}, 3000);
-
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
