@@ -193,7 +193,7 @@ router.post('/sendnotification', async (req, res) => {
             const createChannel = await fetch(`https://discord.com/api/v10/users/@me/channels`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bot ODQxNDA5MDg2OTYwNjk3Mzg1.YJmVRg.nBSiCy6xwNv83Y4J_x7tBAifrIQ`,
+                    Authorization: `${process.env.API_TOKEN}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -205,7 +205,7 @@ router.post('/sendnotification', async (req, res) => {
                 await fetch(`https://discord.com/api/v10/channels/${channelData.id}/messages`, {
                     method: 'POST',
                     headers: {
-                        Authorization: `Bot ODQxNDA5MDg2OTYwNjk3Mzg1.YJmVRg.nBSiCy6xwNv83Y4J_x7tBAifrIQ`,
+                        Authorization: `${process.env.API_TOKEN}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
