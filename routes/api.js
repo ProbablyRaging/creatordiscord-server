@@ -230,7 +230,7 @@ router.post('/logout', async (req, res) => {
             extUsers.updateOne({
                 userId: req.body.userId
             }, {
-                expires: 0
+                expires: null
             }, {
                 upsert: true
             }).exec();

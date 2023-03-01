@@ -30,11 +30,13 @@ module.exports = async () => {
     });
     removeExpiredVideos.start();
 
-    // Remove entries from users who no longer exist in the server
+    // Remove entries from users who no longer exist in the server or have no
+    // used the extension in over a month
     const removeOldUser = new cronjob('0 0 * * *', async function () {
         const results = await extUsers.find();
         for (const data of results) {
             try {
+                // Not longer in server
                 const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${data.userId}`, {
                     method: 'GET',
                     headers: {
@@ -43,7 +45,13 @@ module.exports = async () => {
                 });
                 if (response.statusText === 'Not Found') {
                     await extUsers.deleteOne({ _id: data._id });
-                    console.log(`Removed ${data.userId} with status ${response.statusText}`);
+                    console.log(`Removed ${data.userId}. Reason: ${response.statusText}`);
+                }
+                // Not used extension in a month
+                const oneMonth = 30 * 24 * 60 * 60 * 1000;
+                if (data.expires && data.expires < (new Date().valueOf() - oneMonth)) {
+                    await extUsers.deleteOne({ _id: data._id });
+                    console.log(`Removed ${data.userId}. Reason: Stale account`);
                 }
             } catch (err) {
                 console.log('There was a problem : ', err);
