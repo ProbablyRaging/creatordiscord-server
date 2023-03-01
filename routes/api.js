@@ -186,6 +186,43 @@ router.post('/addlike', async (req, res) => {
     }
 });
 
+router.post('/sendnotification', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const createChannel = await fetch(`https://discord.com/api/v10/users/@me/channels`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bot ODQxNDA5MDg2OTYwNjk3Mzg1.YJmVRg.nBSiCy6xwNv83Y4J_x7tBAifrIQ`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    recipient_id: req.body.userId
+                })
+            });
+            const channelData = await createChannel.json();
+            if (channelData.id) {
+                await fetch(`https://discord.com/api/v10/channels/${channelData.id}/messages`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bot ODQxNDA5MDg2OTYwNjk3Mzg1.YJmVRg.nBSiCy6xwNv83Y4J_x7tBAifrIQ`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: `**Extension Notification** \n> You are eligible to submit a new video \n\n*Disable notifictions via the extension's settings*`
+                    })
+                });
+            }
+            res.send({ message: 'Notification sent' });
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
 router.post('/logout', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
