@@ -5,10 +5,22 @@ const videoList = require('../schema/video-list');
 const fetch = require('node-fetch');
 
 router.post('/getuser', async (req, res) => {
-    // Fetch a user and return the results
+    // Fetch user's data
     const result = await extUsers.findOne({ userId: req.body.userId });
-    if (result) res.send({ "result": result });
-    if (!result) res.send({ "result": false });
+    // Fetch user's Discord avatar
+    if (result && result.userId) {
+        const userData = await fetch(`https://discord.com/api/v10/users/${result.userId}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `${process.env.API_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        const response = await userData.json();
+        res.send({ result: result, avatar: response.avatar });
+    } else {
+        res.send({ error: 'Unknown user' });
+    }
 });
 
 router.post('/addvideo', async (req, res) => {
@@ -59,6 +71,25 @@ router.post('/addvideo', async (req, res) => {
             // If an error occurs, return an error response and log the error
             res.send({ error: 'Unknown error occurred' });
             console.error('There was a problem: ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/usertokens', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const userResult = await extUsers.findOne({ userId: req.body.userId });
+            if (userResult) {
+                res.send({ tokens: userResult.tokens });
+            } else {
+                res.send({ error: 'No user data found' });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
         }
     } else {
         res.send({ message: 'Access denied' });
