@@ -27,6 +27,12 @@ router.post('/addvideo', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
+            // Fetch user data and check token count
+            const userResult = await extUsers.findOne({ userId: req.body.userId });
+            if (!userResult || !userResult.tokens || userResult.tokens < 5) {
+                res.send({ error: `You don't have enough tokens` });
+                return;
+            }
             // Get the video ID from the submitted URL or string
             const videoId = getYoutubeVideoId(req.body.videoId);
             if (videoId) {
