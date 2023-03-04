@@ -70,11 +70,18 @@ router.post('/addvideo', async (req, res) => {
                     res.send({ error: `Video is private, unavailable, or doesn't exist` });
                     return;
                 }
+                const channelIdRegex = /<meta itemprop="channelId" content="([\w-]+)">/;
+                const channelId = response.match(channelIdRegex)[1];
                 // Fetch the video data
                 const hasVideoInQueue = await videoList.findOne({ userId: req.body.userId });
-                const videoAlreadyInQueue = await videoList.findOne({ videoId: videoId });
-                if (videoAlreadyInQueue) {
+                const videoIdExists = await videoList.findOne({ videoId: videoId });
+                const channelIdExists = await videoList.findOne({ channelId: channelId });
+                if (videoIdExists) {
                     res.send({ error: `This video is already in the queue` });
+                    return;
+                }
+                if (channelIdExists) {
+                    res.send({ error: `A video from this channel already exists` });
                     return;
                 }
                 const oneDay = 24 * 60 * 60 * 1000;
@@ -86,6 +93,7 @@ router.post('/addvideo', async (req, res) => {
                     videoList.create({
                         userId: req.body.userId,
                         videoId: videoId,
+                        channelId: channelId,
                         watches: 0,
                         expires: new Date().valueOf() + oneDay
                     });

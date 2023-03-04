@@ -9,6 +9,10 @@ const videoListSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    channelId: {
+        type: String,
+        required: false
+    },
     watches: {
         type: Number,
         required: false
