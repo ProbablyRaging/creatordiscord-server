@@ -23,6 +23,32 @@ router.post('/getuser', async (req, res) => {
     }
 });
 
+router.get('/getusers', async (req, res) => {
+    // Fetch user data
+    const results = await extUsers.find();
+    // Sort high to low for watches
+    // Watches
+    results.sort(function (a, b) {
+        return (b.watches || 0) - (a.watches || 0);
+    });
+    const watches = results.slice(0, 50);
+    // Views
+    results.sort(function (a, b) {
+        return (b.views || 0) - (a.views || 0);
+    });
+    const views = results.slice(0, 50);
+    // Likes
+    results.sort(function (a, b) {
+        return (b.likes || 0) - (a.likes || 0);
+    });
+    const likes = results.slice(0, 50);
+    if (results) {
+        res.send({ watches: watches, views: views, likes: likes });
+    } else {
+        res.send({ error: 'No data found' });
+    }
+});
+
 router.post('/addvideo', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
