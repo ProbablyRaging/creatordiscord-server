@@ -81,7 +81,7 @@ router.post('/addvideo', async (req, res) => {
                     return;
                 }
                 if (channelIdExists) {
-                    res.send({ error: `This YouTube channel already has a video in the queue` });
+                    res.send({ error: `A video from this channel already exists` });
                     return;
                 }
                 const oneDay = 24 * 60 * 60 * 1000;
