@@ -72,6 +72,11 @@ router.post('/addvideo', async (req, res) => {
                 }
                 // Fetch the video data
                 const hasVideoInQueue = await videoList.findOne({ userId: req.body.userId });
+                const videoAlreadyInQueue = await videoList.findOne({ videoId: videoId });
+                if (videoAlreadyInQueue) {
+                    res.send({ error: `This video is already in the queue` });
+                    return;
+                }
                 const oneDay = 24 * 60 * 60 * 1000;
                 // Create an entry if the video doesn't exist in the queue yet
                 if (!hasVideoInQueue) {
