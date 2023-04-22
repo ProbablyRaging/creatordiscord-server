@@ -10,9 +10,9 @@
 <body>
     <div class="container">
         <i class="bi bi-bug"></i>
-        <p class="message"><%= message %></p>
+        <p class="message"><%= message || 'An unknown error occurred' %></p>
         <% if (message.includes('must be a Discord server member')) { %>
-        <button onclick="location.href = 'https://discord.gg/forthecontent'">Join Now</button>
+        <button onclick="location.href = 'https://discord.gg/contentcreator'">Join Now</button>
         <% } %>
     </div>
 </body>
