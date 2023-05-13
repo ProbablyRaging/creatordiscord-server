@@ -70,20 +70,20 @@ router.post('/addvideo', async (req, res) => {
                     res.send({ error: `Video is private, unavailable, or doesn't exist` });
                     return;
                 }
-                const channelIdRegex = /<meta itemprop="channelId" content="([\w-]+)">/;
-                const channelId = response.match(channelIdRegex)[1];
+                // const channelIdRegex = /<meta itemprop="channelId" content="([\w-]+)">/;
+                // const channelId = response.match(channelIdRegex)[1];
                 // Fetch the video data
                 const hasVideoInQueue = await videoList.findOne({ userId: req.body.userId });
                 const videoIdExists = await videoList.findOne({ videoId: videoId });
-                const channelIdExists = await videoList.findOne({ channelId: channelId });
+                // const channelIdExists = await videoList.findOne({ channelId: channelId });
                 if (videoIdExists) {
                     res.send({ error: `This video is already in the queue` });
                     return;
                 }
-                if (channelIdExists) {
-                    res.send({ error: `A video from this channel already exists` });
-                    return;
-                }
+                // if (channelIdExists) {
+                //     res.send({ error: `A video from this channel already exists` });
+                //     return;
+                // }
                 const oneDay = 24 * 60 * 60 * 1000;
                 // Create an entry if the video doesn't exist in the queue yet
                 if (!hasVideoInQueue) {
@@ -93,7 +93,7 @@ router.post('/addvideo', async (req, res) => {
                     videoList.create({
                         userId: req.body.userId,
                         videoId: videoId,
-                        channelId: channelId,
+                        channelId: 'null',
                         watches: 0,
                         expires: new Date().valueOf() + oneDay
                     });
