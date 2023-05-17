@@ -9,17 +9,7 @@ module.exports = async () => {
         const videoResults = await videoList.find();
         // Make sure there are always 5 videos in the queue
         if (videoResults.length <= 5) {
-            // Give each video one extra hour to expire
-            const oneHour = 1 * 60 * 60 * 1000;
-            for (const data of videoResults) {
-                await videoList.updateOne({
-                    videoId: data.videoId
-                }, {
-                    expires: new Date().valueOf() + oneHour
-                }, {
-                    upsert: true
-                });
-            }
+            return;
         } else {
             for (const data of videoResults) {
                 if (new Date().valueOf() > data.expires) {
