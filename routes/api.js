@@ -323,7 +323,7 @@ router.post('/logout', async (req, res) => {
 /**
  * The following are routes used solely for forthecontent.xyz
  */
-router.get('/getusers', async (req, res) => {
+router.get('/membercount', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes('forthecontent.xyz'))) {
         try {
