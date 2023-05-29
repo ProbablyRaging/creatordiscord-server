@@ -43,6 +43,10 @@ app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
+// Auth routes
+const auth = require('./auth');
+app.use('/auth', auth);
+
 // API routes
 const api = require('./routes/api');
 app.use('/api', api);
