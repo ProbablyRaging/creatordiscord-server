@@ -346,7 +346,6 @@ router.post('/resources', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes('forthecontent.xyz') || origin.includes('forthecontentapi.xyz'))) {
         try {
-            console.log(req.body.resource);
             if (req.body.resource) {
                 const result = await resources.findOne({ slug: req.body.resource });
                 if (result) {
