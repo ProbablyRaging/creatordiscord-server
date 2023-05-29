@@ -44,7 +44,7 @@ app.set('views', [
 ]);
 
 // Auth routes
-const auth = require('./auth');
+const auth = require('./routes/auth');
 app.use('/auth', auth);
 
 // API routes
