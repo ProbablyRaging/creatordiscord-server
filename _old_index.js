@@ -9,12 +9,8 @@ const session = require('express-session');
 const startTimers = require('./js/timers');
 const path = require('path');
 
-// Connect to the database
-mongodb.then(() => {
-    console.log('Connected to the database');
-}).catch(err => {
-    console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err);
-});
+// Connect to database
+mongodb.then(() => { console.log('Connected to database') }).catch(err => console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err));
 
 startTimers();
 
@@ -43,16 +39,15 @@ app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
-// API routes
+// Routes
+const auth = require('./routes/auth');
+const error = require('./routes/error');
+const success = require('./routes/success');
 const api = require('./routes/api');
+app.use('/auth', auth);
+app.use('/error', error);
+app.use('/success', success);
 app.use('/api', api);
-
-// React app route
-app.use(express.static(path.join(__dirname, '..', 'build')));
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
-});
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
