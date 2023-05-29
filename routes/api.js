@@ -2,7 +2,9 @@ const { getYoutubeVideoId } = require('../js/utils');
 const router = require('express').Router();
 const extUsers = require('../schema/users');
 const videoList = require('../schema/video-list');
+const resources = require('../schema/resources');
 const fetch = require('node-fetch');
+const { ObjectId } = require('mongodb');
 
 router.post('/getuser', async (req, res) => {
     // Fetch user's data
@@ -331,6 +333,35 @@ router.get('/membercount', async (req, res) => {
             const data = await resolve.json();
             const memberCount = parseInt(data.approximate_member_count).toLocaleString();
             res.send({ message: memberCount });
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.log('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/resources', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes('forthecontent.xyz'))) {
+        try {
+            console.log(req.body.resource);
+            if (req.body.resource) {
+                const result = await resources.findOne({ slug: req.body.resource });
+                if (result) {
+                    res.send({ message: result });
+                } else {
+                    res.send({ error: 'No data' });
+                }
+            } else {
+                const results = await resources.find();
+                if (results.length > 0) {
+                    res.send({ message: results });
+                } else {
+                    res.send({ error: 'No data' });
+                }
+            }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
             console.log('There was a problem : ', err);
