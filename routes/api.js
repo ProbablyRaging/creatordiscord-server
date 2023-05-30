@@ -343,7 +343,7 @@ router.get('/membercount', async (req, res) => {
 });
 
 router.post('/resources', async (req, res) => {
-    const origin = req.headers?.origin;
+    const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.resource) {
@@ -371,7 +371,7 @@ router.post('/resources', async (req, res) => {
 });
 
 router.post('/updateresource', async (req, res) => {
-    const origin = req.headers?.origin;
+    const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.slug) {
