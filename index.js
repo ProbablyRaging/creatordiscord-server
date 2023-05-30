@@ -52,21 +52,11 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // Serve static assets
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
 
 // Serve index.html for non-static routes
 app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-});
-
-// Serve CSS files
-app.get('/assets/*.css', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', req.url));
-});
-
-// Serve JavaScript bundle file
-app.get('/assets/*.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', req.url));
 });
 
 // Redirect /resources/:id to index.html
