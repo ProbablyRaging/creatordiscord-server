@@ -52,12 +52,10 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
-const staticFilePath = path.join(__dirname, '..', 'dist');
-
-app.use(express.static(staticFilePath));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(staticFilePath, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
