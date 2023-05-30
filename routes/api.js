@@ -326,7 +326,6 @@ router.post('/logout', async (req, res) => {
  */
 router.get('/membercount', async (req, res) => {
     const origin = req.headers?.referer;
-    console.log(origin, (origin && (origin.includes('creatordiscord.xyz'))));
     if (origin && (origin.includes('creatordiscord.xyz'))) {
         try {
             const resolve = await fetch(`https://discord.com/api/v9/guilds/${process.env.SERVER_ID}?with_counts=true`, { headers: { "Authorization": `${process.env.API_TOKEN}` } });
@@ -386,6 +385,29 @@ router.post('/updateresource', async (req, res) => {
             }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
+            console.log('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/validate', (req, res) => {
+    const origin = req.headers?.referer;
+    if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        try {
+            if (req.body.loginToken) {
+                if (req.body.loginToken === process.env.EDITOR_TOKEN) {
+                    res.send({ cookie: process.env.COOKIE_SECRET });
+                } else {
+                    res.status(401).send({ error: 'Incorrect password' });
+                }
+            } else if (req.body.validateToken && req.body.validateToken.includes(process.env.COOKIE_SECRET)) {
+                res.send({ success: true });
+            } else {
+                res.send({ error: 'Unknown request' });
+            }
+        } catch (err) {
             console.log('There was a problem : ', err);
         }
     } else {
