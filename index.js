@@ -55,7 +55,7 @@ app.use('/api', api);
 app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
 
 // Handle dynamic routes
-app.get('/resources/*', (req, res) => {
+app.get('/resources/:id', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
