@@ -55,7 +55,7 @@ app.use('/api', api);
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
 // Define the catch-all route for non-static routes
-app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
+app.get(/^(?!.*\.(js|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
