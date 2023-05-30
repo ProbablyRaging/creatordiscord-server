@@ -51,9 +51,15 @@ app.use('/auth', auth);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// React app route
-app.use(express.static(path.join(__dirname, '..', 'dist')));
+// Serve static assets
+app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
 
+// Handle dynamic routes
+app.get('/resources/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
+
+// Handle other routes
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
