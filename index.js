@@ -56,11 +56,13 @@ app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')))
 
 // Serve index.html for non-static routes
 app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
+    console.log('Requested URL:', req.url);
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 // Redirect /resources/:id to index.html
 app.get('/resources/:id', (req, res) => {
+    console.log('Requested URL:', req.url);
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
