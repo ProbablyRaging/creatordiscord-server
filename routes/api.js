@@ -344,7 +344,7 @@ router.get('/membercount', async (req, res) => {
 
 router.post('/resources', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost'))) {
+    if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.resource) {
                 const result = await resources.findOne({ slug: req.body.resource });
