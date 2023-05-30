@@ -325,7 +325,7 @@ router.post('/logout', async (req, res) => {
  * The following are routes used solely for forthecontent.xyz
  */
 router.get('/membercount', async (req, res) => {
-    const origin = req.headers?.origin;
+    const origin = req.headers?.referer;
     console.log(origin, (origin && (origin.includes('creatordiscord.xyz'))));
     if (origin && (origin.includes('creatordiscord.xyz'))) {
         try {
