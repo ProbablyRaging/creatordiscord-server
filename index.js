@@ -51,18 +51,10 @@ app.use('/auth', auth);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// Serve static assets
-app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
+// React app route
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-// Serve index.html for non-static routes
-app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
-    console.log('Requested URL:', req.url);
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-});
-
-// Redirect /resources/:id to index.html
-app.get('/resources/:id', (req, res) => {
-    console.log('Requested URL:', req.url);
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
