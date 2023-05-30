@@ -51,22 +51,13 @@ app.use('/auth', auth);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// Serve static assets
-app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
+// React app route
+const staticFilePath = path.join(__dirname, '..', 'dist');
 
-// Serve index.html for dynamic routes
-app.get('/resources/*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-});
+app.use(express.static(staticFilePath));
 
-// Serve index.html for other routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
-});
-
-// Handle other routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+    res.sendFile(path.join(staticFilePath, 'index.html'));
 });
 
 app.listen(port, () => {
