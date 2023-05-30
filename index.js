@@ -43,9 +43,15 @@ app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
-// Auth routes
+// Extension routes
 const auth = require('./routes/auth');
 app.use('/auth', auth);
+
+const success = require('./routes/success');
+app.use('/success', success);
+
+const error = require('./routes/error');
+app.use('/error', error);
 
 // API routes
 const api = require('./routes/api');

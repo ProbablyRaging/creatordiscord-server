@@ -4,7 +4,6 @@ const extUsers = require('../schema/users');
 const videoList = require('../schema/video-list');
 const resources = require('../schema/resources');
 const fetch = require('node-fetch');
-const { ObjectId } = require('mongodb');
 
 router.post('/getuser', async (req, res) => {
     // Fetch user's data
@@ -360,6 +359,29 @@ router.post('/resources', async (req, res) => {
                 } else {
                     res.send({ error: 'No data' });
                 }
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.log('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/updateresource', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        try {
+            if (req.body.slug) {
+                resources.updateOne(
+                    { slug: req.body.slug },
+                    { raw: req.body.resource },
+                    { upsert: false }
+                ).exec();
+                res.send({ message: 'Ok' });
+            } else {
+                res.send({ error: 'No slug provided' });
             }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
