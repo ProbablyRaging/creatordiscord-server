@@ -54,14 +54,19 @@ app.use('/api', api);
 // Serve static assets
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-// Define the catch-all route for non-static routes
-app.get(/^(?!.*\.(js|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
+// Serve index.html for non-static routes
+app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
+
+// Serve JavaScript bundle file
+app.get('/assets/:file', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dist', 'assets', req.params.file));
 });
 
 // Redirect /resources/:id to index.html
 app.get('/resources/:id', (req, res) => {
-    res.redirect('/');
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
