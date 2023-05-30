@@ -52,10 +52,15 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // Serve static assets
-app.use('/assets', express.static(path.join(__dirname, '..', 'dist', 'assets')));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-// Handle dynamic routes
-app.get('/resources/:id', (req, res) => {
+// Set MIME type for JavaScript files
+app.get('*.js', function (req, res, next) {
+    res.set('Content-Type', 'application/javascript');
+    next();
+});
+
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
 });
 
