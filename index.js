@@ -51,11 +51,17 @@ app.use('/auth', auth);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// React app route
+// Serve static assets
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 
-app.get('*', (req, res) => {
+// Define the catch-all route for non-static routes
+app.get(/^(?!.*\.(js|css|png|jpg|gif|svg|ico|json)$).*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
+
+// Redirect /resources/:id to index.html
+app.get('/resources/:id', (req, res) => {
+    res.redirect('/');
 });
 
 app.listen(port, () => {
