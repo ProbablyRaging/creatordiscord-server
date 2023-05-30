@@ -326,7 +326,7 @@ router.post('/logout', async (req, res) => {
  */
 router.get('/membercount', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes('forthecontent.xyz'))) {
+    if (origin && (origin.includes('creatordiscord.xyz'))) {
         try {
             const resolve = await fetch(`https://discord.com/api/v9/guilds/${process.env.SERVER_ID}?with_counts=true`, { headers: { "Authorization": `${process.env.API_TOKEN}` } });
             const data = await resolve.json();
