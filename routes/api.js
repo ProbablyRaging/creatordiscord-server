@@ -376,7 +376,12 @@ router.post('/updateresource', async (req, res) => {
             if (req.body.slug) {
                 resources.updateOne(
                     { slug: req.body.slug },
-                    { raw: req.body.resource },
+                    {
+                        title: req.body.title,
+                        thumb: req.body.thumb,
+                        raw: req.body.raw,
+                        slug: req.body.slug
+                    },
                     { upsert: false }
                 ).exec();
                 res.send({ message: 'Ok' });
