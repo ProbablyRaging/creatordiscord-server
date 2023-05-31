@@ -45,8 +45,8 @@ app.set('views', [
 ]);
 
 // Extension routes
-// const auth = require('./routes/auth');
-// app.use('/auth', auth);
+const auth = require('./routes/auth');
+app.use('/auth', auth);
 
 // const success = require('./routes/success');
 // app.use('/success', success);
