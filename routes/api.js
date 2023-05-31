@@ -1,8 +1,9 @@
 const { getYoutubeVideoId } = require('../js/utils');
 const router = require('express').Router();
 const extUsers = require('../schema/users');
-const videoList = require('../schema/video-list');
+const videoList = require('../schema/video_list');
 const resources = require('../schema/resources');
+const resourcesMin = require('../schema/resources_min');
 const fetch = require('node-fetch');
 
 router.post('/getuser', async (req, res) => {
@@ -354,17 +355,16 @@ router.post('/resources', async (req, res) => {
                 }
             } else if (req.body.page) {
                 const { page } = req.body;
-                const pageSize = 6; // Define the number of items per page
+                const pageSize = 6;
                 const skip = (page - 1) * pageSize;
-                const totalResults = await resources.countDocuments();
-                const totalPages = Math.ceil(totalResults / pageSize);
-
-                const results = await resources.find().skip(skip).limit(pageSize);
+                const results = await resourcesMin.find().skip(skip).limit(pageSize);
                 if (results.length > 0) {
-                    res.send({ message: results, totalPages });
+                    res.send({ message: results });
                 } else {
-                    res.send({ error: 'No data' });
+                    res.send({ error: 'No results found' });
                 }
+            } else {
+                res.send({ error: 'No params received' });
             }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
@@ -380,13 +380,19 @@ router.post('/createresource', async (req, res) => {
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.slug) {
-                resources.create({
+                await resources.create({
                     title: req.body.title,
                     snippet: req.body.snippet,
                     thumb: req.body.thumb,
                     raw: req.body.raw,
                     slug: req.body.slug,
                     date: req.body.date
+                });
+                await resourcesMin.create({
+                    title: req.body.title,
+                    snippet: req.body.snippet,
+                    thumb: req.body.thumb,
+                    slug: req.body.slug
                 });
                 res.send({ message: 'Ok' });
             } else {
@@ -406,12 +412,21 @@ router.post('/updateresource', async (req, res) => {
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.slug) {
-                resources.updateOne(
+                await resources.updateOne(
                     { slug: req.body.slug },
                     {
                         title: req.body.title,
                         thumb: req.body.thumb,
                         raw: req.body.raw,
+                        slug: req.body.newSlug
+                    },
+                    { upsert: false }
+                ).exec();
+                await resourcesMin.updateOne(
+                    { slug: req.body.slug },
+                    {
+                        title: req.body.title,
+                        thumb: req.body.thumb,
                         slug: req.body.newSlug
                     },
                     { upsert: false }
