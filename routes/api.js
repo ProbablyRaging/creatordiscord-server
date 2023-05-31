@@ -382,7 +382,7 @@ router.post('/updateresource', async (req, res) => {
                         raw: req.body.raw,
                         slug: req.body.newSlug
                     },
-                    { upsert: false }
+                    { upsert: true }
                 ).exec();
                 res.send({ message: 'Ok' });
             } else {
