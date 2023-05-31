@@ -352,17 +352,23 @@ router.post('/resources', async (req, res) => {
                 } else {
                     res.send({ error: 'No data' });
                 }
-            } else {
-                const results = await resources.find();
+            } else if (req.body.page) {
+                const { page } = req.body;
+                const pageSize = 6; // Define the number of items per page
+                const skip = (page - 1) * pageSize;
+                const totalResults = await resources.countDocuments();
+                const totalPages = Math.ceil(totalResults / pageSize);
+
+                const results = await resources.find().skip(skip).limit(pageSize);
                 if (results.length > 0) {
-                    res.send({ message: results });
+                    res.send({ message: results, totalPages });
                 } else {
                     res.send({ error: 'No data' });
                 }
             }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
-            console.log('There was a problem : ', err);
+            console.log('There was a problem: ', err);
         }
     } else {
         res.send({ message: 'Access denied' });
