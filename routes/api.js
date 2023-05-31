@@ -381,7 +381,7 @@ router.post('/createresource', async (req, res) => {
                     raw: req.body.raw,
                     slug: req.body.slug,
                     date: req.body.date
-                }).exec();
+                });
                 res.send({ message: 'Ok' });
             } else {
                 res.send({ error: 'No slug provided' });
