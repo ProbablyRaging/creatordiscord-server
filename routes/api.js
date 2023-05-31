@@ -380,7 +380,7 @@ router.post('/updateresource', async (req, res) => {
                         title: req.body.title,
                         thumb: req.body.thumb,
                         raw: req.body.raw,
-                        slug: req.body.slug
+                        slug: req.body.newSlug
                     },
                     { upsert: false }
                 ).exec();
