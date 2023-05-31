@@ -397,6 +397,25 @@ router.post('/updateresource', async (req, res) => {
     }
 });
 
+router.post('/deleteresource', async (req, res) => {
+    const origin = req.headers?.referer;
+    if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
+        try {
+            if (req.body.slug) {
+                resources.deleteOne({ slug: req.body.slug }).exec();
+                res.send({ message: 'Ok' });
+            } else {
+                res.send({ error: 'No slug provided' });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.log('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
 router.post('/validate', (req, res) => {
     const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
