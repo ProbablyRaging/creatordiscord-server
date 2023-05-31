@@ -449,7 +449,8 @@ router.post('/deleteresource', async (req, res) => {
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.slug) {
-                resources.deleteOne({ slug: req.body.slug }).exec();
+                await resources.deleteOne({ slug: req.body.slug }).exec();
+                await resourcesMin.deleteOne({ slug: req.body.slug }).exec();
                 res.send({ message: 'Ok' });
             } else {
                 res.send({ error: 'No slug provided' });
