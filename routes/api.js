@@ -374,17 +374,16 @@ router.post('/createresource', async (req, res) => {
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.slug) {
-                resources.updateOne(
+                resources.create(
                     { slug: req.body.slug },
                     {
                         title: req.body.title,
                         snippet: req.body.snippet,
                         thumb: req.body.thumb,
                         raw: req.body.raw,
-                        slug: req.body.newSlug,
+                        slug: req.body.slug,
                         date: req.body.date
-                    },
-                    { upsert: false }
+                    }
                 ).exec();
                 res.send({ message: 'Ok' });
             } else {
