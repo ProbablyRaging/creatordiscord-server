@@ -4,7 +4,6 @@ const app = express();
 const port = process.env.PORT;
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
@@ -44,15 +43,9 @@ app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
-// Extension routes
+// Auth routes
 const auth = require('./routes/auth');
 app.use('/auth', auth);
-
-const success = require('./routes/success');
-app.use('/success', success);
-
-const error = require('./routes/error');
-app.use('/error', error);
 
 // API routes
 const api = require('./routes/api');
