@@ -48,11 +48,11 @@ app.set('views', [
 const auth = require('./routes/auth');
 app.use('/auth', auth);
 
-// const success = require('./routes/success');
-// app.use('/success', success);
+const success = require('./routes/success');
+app.use('/success', success);
 
-// const error = require('./routes/error');
-// app.use('/error', error);
+const error = require('./routes/error');
+app.use('/error', error);
 
 // API routes
 const api = require('./routes/api');
