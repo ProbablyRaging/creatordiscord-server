@@ -59,14 +59,14 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 app.use((req, res, next) => {
-    console.log(req.path);
-    // if (req.path.substr(-1) === '/' && req.path.length > 1) {
-    //     const newPath = req.path.slice(0, -1);
-    //     const query = req.url.slice(req.path.length);
-    //     res.redirect(301, newPath + query);
-    // } else {
-    //     next();
-    // }
+    if (req.path.substr(-1) === '/' && req.path.length > 1) {
+        console.log(req.path);
+        const newPath = req.path.slice(0, -1);
+        const query = req.url.slice(req.path.length);
+        res.redirect(301, newPath + query);
+    } else {
+        next();
+    }
 });
 
 // React app route
