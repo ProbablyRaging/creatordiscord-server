@@ -60,10 +60,11 @@ app.use('/api', api);
 // React app route
 app.use((req, res, next) => {
     const { path: requestedPath, originalUrl } = req;
-    console.log(requestedPath, originalUrl);
+    console.log('REQUESTED:', requestedPath);
+    console.log('ORIGINAL:', originalUrl);
     if (requestedPath !== '/' && requestedPath.substr(-1) === '/') {
         const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
-        console.log(urlWithoutTrailingSlash);
+        console.log('GO TO:', urlWithoutTrailingSlash);
         // res.redirect(301, urlWithoutTrailingSlash);
     } else {
         // next();
