@@ -388,6 +388,7 @@ router.post('/createresource', async (req, res) => {
                 await resources.create({
                     title: req.body.title,
                     snippet: req.body.snippet,
+                    keywords: req.body.keywords,
                     thumb: req.body.thumb,
                     raw: req.body.raw,
                     slug: req.body.slug,
@@ -422,6 +423,7 @@ router.post('/updateresource', async (req, res) => {
                     {
                         title: req.body.title,
                         thumb: req.body.thumb,
+                        keywords: req.body.keywords,
                         raw: req.body.raw,
                         slug: req.body.newSlug
                     },

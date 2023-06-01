@@ -9,6 +9,10 @@ const resourcesSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    keywords: {
+        type: String,
+        required: true
+    },
     raw: {
         type: String,
         required: true
