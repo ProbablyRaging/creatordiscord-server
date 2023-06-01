@@ -60,6 +60,7 @@ app.use('/api', api);
 
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(slashes());
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
