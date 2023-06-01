@@ -59,7 +59,10 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
+app.use(express.static(path.join(__dirname, 'dist')));
+
 app.use((req, res, next) => {
+    console.log(req.path);
     if (req.path.substr(-1) === '/' && req.path.length > 1) {
         const newPath = req.path.slice(0, -1);
         const query = req.url.slice(req.path.length);
@@ -68,8 +71,6 @@ app.use((req, res, next) => {
         next();
     }
 });
-
-app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
