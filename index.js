@@ -70,6 +70,17 @@ app.use((req, res, next) => {
     }
 });
 
+app.use((req, res, next) => {
+    const { path: requestedPath, originalUrl } = req;
+    console.log(requestedPath, originalUrl);
+    if (requestedPath !== '/' && requestedPath.substr(-1) === '/') {
+        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
+        // res.redirect(301, urlWithoutTrailingSlash);
+    } else {
+        // next();
+    }
+});
+
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
