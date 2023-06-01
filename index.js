@@ -58,7 +58,7 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
-appapp.use((req, res, next) => {
+app.use((req, res, next) => {
     console.log(req.path);
     if (req.method === 'GET' && req.path.substr(-1) === '/' && req.path.length > 1) {
         const newPath = req.path.slice(0, -1);
