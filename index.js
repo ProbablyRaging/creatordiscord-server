@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT;
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
@@ -59,6 +60,7 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
+app.use(compression());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
