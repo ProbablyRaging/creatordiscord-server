@@ -60,26 +60,23 @@ app.use('/api', api);
 
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(slashes(true));
 
 app.get('/', (req, res) => {
-    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
-    res.redirect(301, newPath);
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.get('/resources', (req, res) => {
-    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
-    res.redirect(301, newPath);
+    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
 });
 
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
-    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
-    res.redirect(301, newPath);
+    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
 });
 
 app.get('*', (req, res) => {
-    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
-    res.redirect(301, newPath);
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
