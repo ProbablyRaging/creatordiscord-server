@@ -68,6 +68,10 @@ app.get('/resources', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
 });
 
+app.get('/resources/create', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
     res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
