@@ -60,7 +60,6 @@ app.use('/api', api);
 
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use(slashes(true));
 
 app.get('/', (req, res) => {
     const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
