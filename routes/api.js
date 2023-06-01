@@ -364,7 +364,12 @@ router.post('/resources', async (req, res) => {
                     res.send({ error: 'No results found' });
                 }
             } else {
-                res.send({ error: 'No params received' });
+                const results = await resourcesMin.find();
+                if (results.length > 0) {
+                    res.send({ message: results });
+                } else {
+                    res.send({ error: 'No results found' });
+                }
             }
         } catch (err) {
             res.send({ error: 'Unknown error occurred' });
