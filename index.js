@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT;
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
@@ -58,52 +59,23 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
-app.get('/', (req, res, next) => {
-    const { originalUrl } = req;
-    if (originalUrl !== '/' && originalUrl.substr(-1) === '/') {
-        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
-        res.redirect(301, urlWithoutTrailingSlash);
-    } else {
-        next();
-    }
-}, (req, res) => {
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.get('/resources', (req, res, next) => {
-    const { originalUrl } = req;
-    if (originalUrl !== '/resources' && originalUrl.substr(-1) === '/') {
-        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
-        res.redirect(301, urlWithoutTrailingSlash);
-    } else {
-        next();
-    }
-}, (req, res) => {
+app.get('/resources', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
 });
 
-app.get('/resources/:slug', (req, res, next) => {
-    const { slug } = req.params;
-    const { originalUrl } = req;
-    if (originalUrl.substr(-1) === '/') {
-        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
-        res.redirect(301, urlWithoutTrailingSlash);
-    } else {
-        next();
-    }
-}, (req, res) => {
+app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
     res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
 });
 
 app.get('*', (req, res) => {
-    const { originalUrl } = req;
-    if (originalUrl !== '/' && originalUrl.substr(-1) === '/') {
-        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
-        res.redirect(301, urlWithoutTrailingSlash);
-    } else {
-        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-    }
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
