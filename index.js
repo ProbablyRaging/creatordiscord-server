@@ -58,19 +58,9 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
-app.use((req, res, next) => {
-    console.log(req.path);
-    if (req.method === 'GET' && req.path.substr(-1) === '/' && req.path.length > 1) {
-        const newPath = req.path.slice(0, -1);
-        const query = req.url.slice(req.path.length);
-        res.redirect(301, newPath + query);
-    } else {
-        next();
-    }
-});
-
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(slashes(true));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
