@@ -58,16 +58,16 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
-app.use((req, res, next) => {
-    if (req.path.substr(-1) === '/' && req.path.length > 1) {
-        console.log(req.path);
-        const newPath = req.path.slice(0, -1);
-        const query = req.url.slice(req.path.length);
-        res.redirect(301, newPath + query);
-    } else {
-        next();
-    }
-});
+// app.use((req, res, next) => {
+//     if (req.path.substr(-1) === '/' && req.path.length > 1) {
+//         console.log(req.path);
+//         const newPath = req.path.slice(0, -1);
+//         const query = req.url.slice(req.path.length);
+//         res.redirect(301, newPath + query);
+//     } else {
+//         next();
+//     }
+// });
 
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
