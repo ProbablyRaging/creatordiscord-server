@@ -58,8 +58,6 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
-app.use(express.static(path.join(__dirname, 'dist')));
-
 app.use((req, res, next) => {
     const { path: requestedPath, originalUrl } = req;
     console.log(requestedPath, originalUrl);
@@ -71,6 +69,8 @@ app.use((req, res, next) => {
         next();
     }
 });
+
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
