@@ -71,15 +71,7 @@ app.get('/resources', (req, res) => {
 
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
-    const filePath = path.join(__dirname, 'dist', 'resources', slug, 'index.html');
-
-    fs.access(filePath, fs.constants.F_OK, (err) => {
-        if (err) {
-            res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-        } else {
-            res.sendFile(filePath);
-        }
-    });
+    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
 });
 
 app.get('*', (req, res) => {
