@@ -74,8 +74,10 @@ app.get('/', (req, res, next) => {
 
 app.get('/resources', (req, res, next) => {
     const { originalUrl } = req;
+    console.log(originalUrl);
     if (originalUrl !== '/resources' && originalUrl.substr(-1) === '/') {
         const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
+        console.log(urlWithoutTrailingSlash);
         res.redirect(301, urlWithoutTrailingSlash);
     } else {
         next();
