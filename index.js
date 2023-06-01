@@ -4,7 +4,6 @@ const app = express();
 const port = process.env.PORT;
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
-const slashes = require('connect-slashes');
 const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
@@ -60,7 +59,16 @@ app.use('/api', api);
 
 // React app route
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use(slashes(false));
+
+app.use((req, res, next) => {
+    const { path: requestedPath, originalUrl } = req;
+    if (requestedPath !== '/' && requestedPath.substr(-1) === '/') {
+        const urlWithoutTrailingSlash = originalUrl.slice(0, -1);
+        res.redirect(301, urlWithoutTrailingSlash);
+    } else {
+        next();
+    }
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
