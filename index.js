@@ -63,20 +63,24 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.use(slashes(true));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
+    res.redirect(301, newPath);
 });
 
 app.get('/resources', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
+    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
+    res.redirect(301, newPath);
 });
 
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
-    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
+    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
+    res.redirect(301, newPath);
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    const newPath = req.path.replace(/\/$/, ''); // Remove trailing slash
+    res.redirect(301, newPath);
 });
 
 app.listen(port, () => {
