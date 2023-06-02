@@ -62,7 +62,8 @@ app.use('/api', api);
 // Next.js app route
 app.use(express.static(path.join(__dirname, '/next')));
 app.get('*', (req, res) => {
-    res.redirect('/next' + req.url);
+    const url = req.url.startsWith('/next') ? req.url : '/next' + req.url;
+    res.sendFile(path.join(__dirname, url));
 });
 
 app.listen(port, () => {
