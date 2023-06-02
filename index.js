@@ -77,11 +77,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/resources', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
 
 app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'resources', 'create', 'index.html'));
 });
 
 app.get('/resources/:slug', (req, res) => {
