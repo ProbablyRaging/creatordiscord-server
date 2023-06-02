@@ -11,11 +11,11 @@ const startTimers = require('./js/timers');
 const path = require('path');
 
 // Connect to the database
-mongodb.then(() => {
-    console.log('Connected to the database');
-}).catch(err => {
-    console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err);
-});
+// mongodb.then(() => {
+//     console.log('Connected to the database');
+// }).catch(err => {
+//     console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err);
+// });
 
 startTimers();
 
