@@ -145,6 +145,7 @@ router.post('/usertokens', async (req, res) => {
 });
 
 router.get('/videolist', async (req, res) => {
+    console.log('boop');
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
         try {
