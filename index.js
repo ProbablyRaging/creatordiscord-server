@@ -76,6 +76,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
+app.get('/extguide', (req, res) => {
+    res.send(200)
+});
+
 app.get('/resources', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
