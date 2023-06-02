@@ -145,6 +145,7 @@ router.post('/usertokens', async (req, res) => {
 
 router.get('/videolist', async (req, res) => {
     const origin = req.headers?.origin;
+    console.log(origin);
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             const results = await videoList.find().sort({ watches: 1 });
