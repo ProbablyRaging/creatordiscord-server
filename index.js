@@ -76,10 +76,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
-app.get('/extguide', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
-});
-
 app.get('/resources', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
@@ -91,6 +87,14 @@ app.get('/resources/create', (req, res) => {
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
     res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(reactDirPath, 'login', 'index.html'));
+});
+
+app.get('/extguide', (req, res) => {
+    res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
 });
 
 app.get('*', (req, res) => {
