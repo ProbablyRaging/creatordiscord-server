@@ -81,6 +81,7 @@ app.get('/resources', (req, res) => {
 });
 
 app.get('/resources/create', (req, res) => {
+    console.log(req.path);
     if (req.path.charAt(str.length - 1)) return;
     res.redirect('/resources/create');
 });
