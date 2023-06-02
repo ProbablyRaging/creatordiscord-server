@@ -80,8 +80,7 @@ app.get('/resources', (req, res) => {
 });
 
 app.get('/resources/create', (req, res) => {
-    res.render(path.join(__dirname, 'dist', 'index.html'));
-    // res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.get('/resources/:slug', (req, res) => {
