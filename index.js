@@ -1,7 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
+const next = require('next');
+
 const port = process.env.PORT;
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
 const compression = require('compression');
@@ -19,7 +24,9 @@ mongodb.then(() => {
 
 startTimers();
 
-app.use(function (req, res, next) {
+const server = express();
+
+server.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -29,43 +36,43 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+server.use(bodyParser.json({ limit: '50mb' }));
+server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-app.use(session({
+server.use(session({
     secret: 'some secret',
     saveUninitialized: false,
     resave: false
 }));
-app.use(passport.session());
-app.use(express.static(path.join(__dirname, 'public')));
+server.use(passport.session());
+server.use(express.static(path.join(__dirname, 'public')));
 
-app.set('view engine', 'ejs');
-app.set('views', [
+server.set('view engine', 'ejs');
+server.set('views', [
     path.join(__dirname, '/views')
 ]);
 
 // Extension routes
 const auth = require('./routes/auth');
-app.use('/auth', auth);
+server.use('/auth', auth);
 
 const success = require('./routes/success');
-app.use('/success', success);
+server.use('/success', success);
 
 const error = require('./routes/error');
-app.use('/error', error);
+server.use('/error', error);
 
 // API routes
 const api = require('./routes/api');
-app.use('/api', api);
+server.use('/api', api);
 
-// Next.js app route
-app.use(express.static(path.join(__dirname, '/next')));
-app.get('*', (req, res) => {
-    const url = req.url.startsWith('/next') ? req.url : '/next' + req.url;
-    res.sendFile(path.join(__dirname, url));
-});
+// Next.js request handler
+app.prepare().then(() => {
+    server.get('*', (req, res) => {
+        return handle(req, res);
+    });
 
-app.listen(port, () => {
-    console.log(`Listening on port: ${port}`);
+    server.listen(port, () => {
+        console.log(`Listening on port: ${port}`);
+    });
 });
