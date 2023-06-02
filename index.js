@@ -94,6 +94,9 @@ app.get('/extguide', (req, res) => {
 });
 
 app.get('*', (req, res) => {
+    console.log('Path', req.path);
+    console.log('Original', req.url);
+    console.log('Param', req.params);
     res.status(302).json({ redirect: req.url });
 });
 
