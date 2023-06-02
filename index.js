@@ -59,37 +59,10 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// React app route
-app.use(compression());
-app.use(express.static(path.join(__dirname, 'dist')));
-
-app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'robots.txt'));
-});
-
-app.get('/sitemap.xml', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'sitemap.xml'));
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.get('/resources', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
-});
-
-app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.get('/resources/:slug', (req, res) => {
-    const { slug } = req.params;
-    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
-});
-
+// Next.js app route
+app.use(express.static(path.join(__dirname, '/next')));
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.redirect('/next' + req.url);
 });
 
 app.listen(port, () => {
