@@ -84,7 +84,7 @@ app.get('/resources/create', (req, res) => {
     console.log(req.path);
     console.log(req.path.charAt(req.path.length - 1));
     if (req.path.charAt(req.path.length - 1) !== '/') return;
-    res.redirect('/resources/create/');
+    res.redirect('/resources/create');
 });
 
 app.get('/resources/:slug', (req, res) => {
