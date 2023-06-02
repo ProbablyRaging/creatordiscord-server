@@ -1,12 +1,7 @@
 require('dotenv').config();
 const express = require('express');
-const next = require('next');
-
+const app = express();
 const port = process.env.PORT;
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
-const handle = app.getRequestHandler();
-
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
 const compression = require('compression');
@@ -24,9 +19,7 @@ mongodb.then(() => {
 
 startTimers();
 
-const server = express();
-
-server.use(function (req, res, next) {
+app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -36,43 +29,69 @@ server.use(function (req, res, next) {
     next();
 });
 
-server.use(bodyParser.json({ limit: '50mb' }));
-server.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-server.use(session({
+app.use(session({
     secret: 'some secret',
     saveUninitialized: false,
     resave: false
 }));
-server.use(passport.session());
-server.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
 
-server.set('view engine', 'ejs');
-server.set('views', [
+app.set('view engine', 'ejs');
+app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
 // Extension routes
 const auth = require('./routes/auth');
-server.use('/auth', auth);
+app.use('/auth', auth);
 
 const success = require('./routes/success');
-server.use('/success', success);
+app.use('/success', success);
 
 const error = require('./routes/error');
-server.use('/error', error);
+app.use('/error', error);
 
 // API routes
 const api = require('./routes/api');
-server.use('/api', api);
+app.use('/api', api);
 
-// Next.js request handler
-app.prepare().then(() => {
-    server.get('*', (req, res) => {
-        return handle(req, res);
-    });
+// React app route
+app.use(compression());
+app.use(express.static(path.join(__dirname, 'dist')));
 
-    server.listen(port, () => {
-        console.log(`Listening on port: ${port}`);
-    });
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'robots.txt'));
+});
+
+app.get('/sitemap.xml', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'sitemap.xml'));
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.get('/resources', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
+});
+
+app.get('/resources/create', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.get('/resources/:slug', (req, res) => {
+    const { slug } = req.params;
+    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.listen(port, () => {
+    console.log(`Listening on port: ${port}`);
 });
