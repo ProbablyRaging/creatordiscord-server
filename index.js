@@ -60,36 +60,38 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
+const reactDirPath = `${__dirname}, 'react'`;
+
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(reactDirPath)));
 
 app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'robots.txt'));
+    res.sendFile(path.join(reactDirPath, 'robots.txt'));
 });
 
 app.get('/sitemap.xml', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'sitemap.xml'));
+    res.sendFile(path.join(reactDirPath, 'sitemap.xml'));
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.get('/resources', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
 
 app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
-    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.listen(port, () => {
