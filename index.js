@@ -60,8 +60,7 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
-const reactDirPath = `${__dirname}, 'react'`;
-
+const reactDirPath = path.join(__dirname, 'react');
 app.use(compression());
 app.use(express.static(path.join(reactDirPath)));
 
