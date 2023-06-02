@@ -42,7 +42,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('view engine', 'ejs');
 app.set('views', [
-    path.join(__dirname, '/views')
+    path.join(__dirname, '/views'),
+    path.join(__dirname, '/next')  // Add path to Next.js app's .next directory
 ]);
 
 // Extension routes
@@ -59,39 +60,22 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
-// React app route
-app.use(compression());
-app.use(express.static(path.join(__dirname, 'dist')));
+// Next.js route
+const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
+const nextHandler = nextApp.getRequestHandler();
 
-app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'robots.txt'));
-});
+nextApp.prepare().then(() => {
+    app.get('/next/*', (req, res) => {
+        nextHandler(req, res);
+    });
 
-app.get('/sitemap.xml', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'sitemap.xml'));
-});
+    app.get('*', (req, res) => {
+        nextHandler(req, res);
+    });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.get('/resources', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'resources', 'index.html'));
-});
-
-app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.get('/resources/:slug', (req, res) => {
-    const { slug } = req.params;
-    res.sendFile(path.join(__dirname, 'dist', 'resources', slug, 'index.html'));
-});
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-app.listen(port, () => {
-    console.log(`Listening on port: ${port}`);
+    app.listen(port, () => {
+        console.log(`Listening on port: ${port}`);
+    });
+}).catch((err) => {
+    console.error('Error starting Next.js:', err);
 });
