@@ -77,7 +77,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/resources', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.get('/resources/create', (req, res) => {
