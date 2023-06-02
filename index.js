@@ -60,46 +60,46 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // React app route
-const reactDirPath = path.join(__dirname, 'react');
-app.use(compression());
-app.use(express.static(path.join(reactDirPath)));
+// const reactDirPath = path.join(__dirname, 'react');
+// app.use(compression());
+// app.use(express.static(path.join(reactDirPath)));
 
-app.get('/robots.txt', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'robots.txt'));
-});
+// app.get('/robots.txt', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'robots.txt'));
+// });
 
-app.get('/sitemap.xml', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'sitemap.xml'));
-});
+// app.get('/sitemap.xml', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'sitemap.xml'));
+// });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'index.html'));
+// });
 
-app.get('/resources', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
-});
+// app.get('/resources', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
+// });
 
-app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
-});
+// app.get('/resources/create', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'index.html'));
+// });
 
-app.get('/resources/:slug', (req, res) => {
-    const { slug } = req.params;
-    res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
-});
+// app.get('/resources/:slug', (req, res) => {
+//     const { slug } = req.params;
+//     res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
+// });
 
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'login', 'index.html'));
-});
+// app.get('/login', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'login', 'index.html'));
+// });
 
-app.get('/extguide', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
-});
+// app.get('/extguide', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
+// });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(reactDirPath, 'index.html'));
+// });
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
