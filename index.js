@@ -81,7 +81,7 @@ app.get('/resources', (req, res) => {
 });
 
 app.get('/resources/create', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
+    res.status(302).json({ redirect: '/resources/create' });
 });
 
 app.get('/resources/:slug', (req, res) => {
