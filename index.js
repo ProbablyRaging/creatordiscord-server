@@ -61,7 +61,10 @@ const api = require('./routes/api');
 app.use('/api', api);
 
 // Next.js route
-const nextApp = require('next')({ dev: process.env.NODE_ENV !== 'production' });
+const nextApp = require('next')({
+    dev: process.env.NODE_ENV !== 'production',
+    dir: path.join(__dirname, 'next') // Specify the custom directory path for Next.js app
+});
 const nextHandler = nextApp.getRequestHandler();
 
 nextApp.prepare().then(() => {
