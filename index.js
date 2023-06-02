@@ -94,7 +94,7 @@ app.get('/extguide', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.status(302).json({ redirect: '/resources/create' });
+    res.status(302).json({ redirect: req.url });
 });
 
 app.listen(port, () => {
