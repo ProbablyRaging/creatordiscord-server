@@ -77,7 +77,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/extguide', (req, res) => {
-    res.send(200)
+    res.redirect('/extguide/')
 });
 
 app.get('/resources', (req, res) => {
