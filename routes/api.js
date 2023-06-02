@@ -26,6 +26,7 @@ router.post('/getuser', async (req, res) => {
 });
 
 router.get('/getusers', async (req, res) => {
+    console.log('boop');
     // Fetch user data
     const results = await extUsers.find();
     // Sort high to low for watches
