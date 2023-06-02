@@ -80,10 +80,6 @@ app.get('/resources', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
 
-app.get('/resources/create', (req, res) => {
-    res.status(302).json({ redirect: '/resources/create' });
-});
-
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
     res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
@@ -98,7 +94,7 @@ app.get('/extguide', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'index.html'));
+    res.status(302).json({ redirect: '/resources/create' });
 });
 
 app.listen(port, () => {
