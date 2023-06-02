@@ -53,7 +53,7 @@ router.get('/getusers', async (req, res) => {
 
 router.post('/addvideo', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             // Fetch user data and check token count
             const userResult = await extUsers.findOne({ userId: req.body.userId });
@@ -126,7 +126,7 @@ router.post('/addvideo', async (req, res) => {
 
 router.post('/usertokens', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             const userResult = await extUsers.findOne({ userId: req.body.userId });
             if (userResult) {
@@ -145,7 +145,7 @@ router.post('/usertokens', async (req, res) => {
 
 router.get('/videolist', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             const results = await videoList.find().sort({ watches: 1 });
             if (results.length < 1) {
@@ -170,7 +170,7 @@ router.get('/videolist', async (req, res) => {
 
 router.post('/addtokens', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             // Fetch the user and add the appropriate amount of tokens
             const userResult = await extUsers.findOne({ userId: req.body.userId });
@@ -202,7 +202,7 @@ router.post('/addtokens', async (req, res) => {
 
 router.post('/addwatch', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             // Update the videos watch count
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
@@ -241,7 +241,7 @@ router.post('/addwatch', async (req, res) => {
 
 router.post('/addlike', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             // Fetch the liked video's data
             const videoResult = await videoList.findOne({ videoId: req.body.videoId });
@@ -266,7 +266,7 @@ router.post('/addlike', async (req, res) => {
 
 router.post('/sendnotification', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             const createChannel = await fetch(`https://discord.com/api/v10/users/@me/channels`, {
                 method: 'POST',
@@ -303,7 +303,7 @@ router.post('/sendnotification', async (req, res) => {
 
 router.post('/logout', async (req, res) => {
     const origin = req.headers?.origin;
-    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ipjgbplbhhlbckejfoclohbngmdpgmbd'))) {
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV) || origin.includes('ehgcefcaeefdkfedceokbphghglfamng'))) {
         try {
             extUsers.updateOne({
                 userId: req.body.userId
