@@ -4,18 +4,13 @@ const app = express();
 const port = process.env.PORT;
 const { mongodb } = require('./mongo');
 const bodyParser = require('body-parser');
-const compression = require('compression');
 const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
 const path = require('path');
 
-// Connect to the database
-mongodb.then(() => {
-    console.log('Connected to the database');
-}).catch(err => {
-    console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err);
-});
+// Connect to database
+mongodb.then(() => { console.log('Connected to database') }).catch(err => console.error(`${path.basename(__filename)} There was a problem connecting to the database: `, err));
 
 startTimers();
 
@@ -44,61 +39,15 @@ app.set('views', [
     path.join(__dirname, '/views')
 ]);
 
-// Extension routes
+// Routes
 const auth = require('./routes/auth');
-app.use('/auth', auth);
-
-const success = require('./routes/success');
-app.use('/success', success);
-
 const error = require('./routes/error');
-app.use('/error', error);
-
-// API routes
+const success = require('./routes/success');
 const api = require('./routes/api');
+app.use('/auth', auth);
+app.use('/error', error);
+app.use('/success', success);
 app.use('/api', api);
-
-// React app route
-// const reactDirPath = path.join(__dirname, 'react');
-// app.use(compression());
-// app.use(express.static(path.join(reactDirPath)));
-
-// app.get('/robots.txt', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'robots.txt'));
-// });
-
-// app.get('/sitemap.xml', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'sitemap.xml'));
-// });
-
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'index.html'));
-// });
-
-// app.get('/resources', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
-// });
-
-// app.get('/resources/create', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'index.html'));
-// });
-
-// app.get('/resources/:slug', (req, res) => {
-//     const { slug } = req.params;
-//     res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
-// });
-
-// app.get('/login', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'login', 'index.html'));
-// });
-
-// app.get('/extguide', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
-// });
-
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(reactDirPath, 'index.html'));
-// });
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
