@@ -81,10 +81,7 @@ app.get('/resources', (req, res) => {
 });
 
 app.get('/resources/create', (req, res) => {
-    console.log(req.path);
-    console.log(req.path.charAt(req.path.length - 1));
-    if (req.path.charAt(req.path.length - 1) !== '/') return;
-    res.redirect('/resources/create');
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.get('/resources/:slug', (req, res) => {
