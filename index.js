@@ -62,14 +62,25 @@ app.use('/api', api);
 
 
 
-// Serve the precompiled Next.js app
-app.use(express.static(path.join(__dirname, 'next/.next')));
-
-// Catch-all route for Next.js app
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'next/.next/index.html'));
+// Next.js route
+const nextApp = require('next')({
+    dev: process.env.NODE_ENV !== 'production',
+    dir: path.join(__dirname, 'next') // Specify the custom directory path for Next.js app
 });
+const nextHandler = nextApp.getRequestHandler();
 
-app.listen(port, () => {
-    console.log(`Listening on port: ${port}`);
+nextApp.prepare().then(() => {
+    app.get('/next/*', (req, res) => {
+        nextHandler(req, res);
+    });
+
+    app.get('*', (req, res) => {
+        nextHandler(req, res);
+    });
+
+    app.listen(port, () => {
+        console.log(`Listening on port: ${port}`);
+    });
+}).catch((err) => {
+    console.error('Error starting Next.js:', err);
 });
