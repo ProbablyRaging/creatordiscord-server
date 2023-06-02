@@ -73,7 +73,11 @@ app.get('/sitemap.xml', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(reactDirPath, 'landing', 'index.html'));
+    res.sendFile(path.join(reactDirPath, 'index.html'));
+});
+
+app.get('/extguide', (req, res) => {
+    res.sendFile(path.join(reactDirPath, 'extguide', 'index.html'));
 });
 
 app.get('/resources', (req, res) => {
