@@ -80,6 +80,11 @@ app.get('/resources', (req, res) => {
     res.sendFile(path.join(reactDirPath, 'resources', 'index.html'));
 });
 
+app.get('/resources/create', (req, res) => {
+    if (req.path.charAt(str.length - 1)) return;
+    res.redirect('/resources/create');
+});
+
 app.get('/resources/:slug', (req, res) => {
     const { slug } = req.params;
     res.sendFile(path.join(reactDirPath, 'resources', slug, 'index.html'));
@@ -94,10 +99,7 @@ app.get('/extguide', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    console.log('Path', req.path);
-    console.log('Original', req.url);
-    console.log('Param', req.params);
-    res.send({ redirect: req.url });
+    res.sendFile(path.join(reactDirPath, 'index.html'));
 });
 
 app.listen(port, () => {
