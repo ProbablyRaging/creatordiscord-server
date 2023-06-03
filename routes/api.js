@@ -481,6 +481,7 @@ router.post('/validate', (req, res) => {
         try {
             if (req.body.loginToken) {
                 if (req.body.loginToken === process.env.EDITOR_TOKEN) {
+                    console.log('HAD VALIDATED');
                     res.send({ cookie: process.env.COOKIE_SECRET });
                 } else {
                     res.status(401).send({ error: 'Incorrect password' });
