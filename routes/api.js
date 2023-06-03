@@ -472,22 +472,16 @@ router.post('/deleteresource', async (req, res) => {
 });
 
 router.post('/validate', (req, res) => {
-    console.log(req.headers.referer);
-    console.log(req.body.loginToken);
-    console.log(req.body.validateToken);
-    console.log(process.env.COOKIE_SECRET);
     const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
             if (req.body.loginToken) {
                 if (req.body.loginToken === process.env.EDITOR_TOKEN) {
-                    console.log('HAD VALIDATED');
                     res.send({ cookie: process.env.COOKIE_SECRET });
                 } else {
                     res.status(401).send({ error: 'Incorrect password' });
                 }
             } else if (req.body.validateToken && req.body.validateToken.includes(process.env.COOKIE_SECRET)) {
-                console.log('Validated');
                 res.send({ success: true });
             } else {
                 res.send({ error: 'Unknown request' });
