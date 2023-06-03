@@ -485,6 +485,7 @@ router.post('/validate', (req, res) => {
                     res.status(401).send({ error: 'Incorrect password' });
                 }
             } else if (req.body.validateToken && req.body.validateToken.includes(process.env.COOKIE_SECRET)) {
+                console.log('Validated');
                 res.send({ success: true });
             } else {
                 res.send({ error: 'Unknown request' });
