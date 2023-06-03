@@ -472,6 +472,9 @@ router.post('/deleteresource', async (req, res) => {
 });
 
 router.post('/validate', (req, res) => {
+    console.log(req.headers.referer);
+    console.log(req.body.loginToken);
+    console.log(process.env.COOKIE_SECRET);
     const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
