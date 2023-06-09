@@ -58,6 +58,12 @@ app.use('/error', error);
 const api = require('./routes/api');
 app.use('/api', api);
 
+// Test routes
+app.use(express.static(path.join(__dirname, 'test')));
+app.get('/test', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test', 'index.html'));
+});
+
 // React app route
 const reactDirPath = path.join(__dirname, 'react');
 app.use(compression());
