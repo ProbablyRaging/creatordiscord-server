@@ -20,6 +20,21 @@ module.exports = async () => {
     });
     removeExpiredVideos.start();
 
+    // Check if videos have been deleted, unlisted, or privated
+    const removeDeadVideos = new cronjob('*/30 * * * *', async function () {
+        const videoResults = await videoList.find();
+        // Make sure there are always 5 videos in the queue
+        for (const data of videoResults) {
+            const resolve = await fetch(`https://www.youtube.com/watch?v=${data.videoId}`);
+            const response = await resolve.text();
+            if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
+                console.log('Removing', data.videoId);
+                await videoList.deleteOne({ videoId: data.videoId });
+            }
+        }
+    });
+    removeDeadVideos.start();
+
     // Remove entries from users who no longer exist in the server or have no
     // used the extension in over a month
     const removeOldUser = new cronjob('0 0 * * *', async function () {

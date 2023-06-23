@@ -65,7 +65,7 @@ router.post('/addvideo', async (req, res) => {
             const videoId = getYoutubeVideoId(req.body.videoId);
             if (videoId) {
                 // Fetch the YouTube video page and If the video is unavailable or private,
-                //return an error response and exit the function
+                // return an error response and exit the function
                 const resolve = await fetch(`https://www.youtube.com/watch?v=${videoId}`);
                 const response = await resolve.text();
                 if (response.includes(`This video isn't available any more`) || response.includes(`This is a private video`)) {
