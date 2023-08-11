@@ -323,6 +323,13 @@ router.post('/logout', async (req, res) => {
 });
 
 /**
+ * The following are routes used solely for hideshorts.com
+ */
+router.post('/payment_success', async (req, res) => {
+    console.log(req.body);
+});
+
+/**
  * The following are routes used solely for forthecontent.xyz
  */
 router.get('/membercount', async (req, res) => {
