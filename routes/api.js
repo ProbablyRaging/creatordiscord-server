@@ -363,7 +363,7 @@ router.post('/hys_validate', async (req, res) => {
     // Initial validation
     if (req.body.email) {
         const results = await subscriptionsSchema.findOne({ customerEmail: req.body.email.toLowerCase() });
-        console.log(results);
+        console.log(new Date().valueOf() < results?.expires);
         if (results && new Date().valueOf() < results?.expires) {
             if (!results.activated) {
                 subscriptionsSchema.updateOne({
