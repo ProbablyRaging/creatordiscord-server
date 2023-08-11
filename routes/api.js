@@ -4,6 +4,7 @@ const extUsers = require('../schema/users');
 const videoList = require('../schema/video_list');
 const resources = require('../schema/resources');
 const resourcesMin = require('../schema/resources_min');
+const subscriptionsSchema = require('../schema/subscriptions');
 const fetch = require('node-fetch');
 
 router.post('/getuser', async (req, res) => {
@@ -325,8 +326,66 @@ router.post('/logout', async (req, res) => {
 /**
  * The following are routes used solely for hideshorts.com
  */
+const stripe = require('stripe')(process.env.STRIPE_SK);
+
 router.post('/payment_success', async (req, res) => {
-    console.log(req.body);
+    const paymentIntent = req.body.data.object;
+    const paymentType = req.body.type;
+    const paymentDescription = paymentIntent.description;
+    const paymentId = paymentIntent.id;
+    const customerId = paymentIntent.customer;
+    const paymentAmount = paymentIntent.amount;
+    if (paymentType === 'charge.succeeded' && paymentDescription === 'Subscription creation' && paymentAmount === 500) {
+        stripe.customers.retrieve(customerId, (err, customer) => {
+            if (!err && customer) {
+                const customerEmail = customer.email;
+                console.log(customerEmail);
+                try {
+                    subscriptionsSchema.create({
+                        paymentId: paymentId,
+                        customerEmail: customerEmail
+                    });
+                } catch (err) {
+                    console.error('There was a problem : ', err);
+                }
+            } else {
+                console.error('Error retrieving customer:', err);
+            }
+        });
+    }
+    res.sendStatus(200);
+});
+
+router.post('/hys_validate', async (req, res) => {
+    // Initial validation
+    if (req.body.email) {
+        const results = await subscriptionsSchema.findOne({ customerEmail: req.body.email.toLowerCase() });
+        if (results && results.paymentId) {
+            if (!results.activated) {
+                subscriptionsSchema.updateOne({
+                    customerEmail: req.body.email.toLowerCase()
+                }, {
+                    activated: true
+                }, {
+                    upsert: true
+                }).exec();
+                res.send({ message: results.paymentId });
+            } else {
+                res.send({ error: 'This email has already been used to activate a subscription. If you need to reset your activation please contact us at dev@hideshorts.com' });
+            }
+        } else {
+            res.send({ error: 'A subscription for this email does not exist' });
+        }
+    }
+    // For rechecking purposes
+    if (req.body.premiumKey) {
+        const results = await subscriptionsSchema.findOne({ customerEmail: req.body.key });
+        if (results && results.activated) {
+            res.send({ message: true });
+        } else {
+            res.send({ error: 'Subscription not activated' });
+        }
+    }
 });
 
 /**
