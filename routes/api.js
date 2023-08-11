@@ -337,7 +337,7 @@ router.post('/payment_success', async (req, res) => {
         stripe.customers.retrieve(customerId, (err, customer) => {
             if (!err && customer) {
                 const customerEmail = customer.email;
-                const planEndTimestamp = paymentIntent.current_period_end + 86400;
+                const planEndTimestamp = (paymentIntent.current_period_end + 86400) * 1000;
                 try {
                     subscriptionsSchema.updateOne({
                         customerEmail: customerEmail
@@ -384,6 +384,7 @@ router.post('/hys_validate', async (req, res) => {
     // For rechecking purposes
     if (req.body.premiumKey) {
         const results = await subscriptionsSchema.findOne({ paymentId: req.body.customerEmail });
+        console.log(new Date().valueOf() < results?.expires);
         if (results && new Date().valueOf() < results?.expires) {
             res.send({ message: true });
         } else {
