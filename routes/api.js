@@ -379,7 +379,7 @@ router.post('/hys_validate', async (req, res) => {
     }
     // For rechecking purposes
     if (req.body.premiumKey) {
-        const results = await subscriptionsSchema.findOne({ paymentId: req.body.key });
+        const results = await subscriptionsSchema.findOne({ paymentId: req.body.premiumKey });
         if (results && results.activated) {
             res.send({ message: true });
         } else {
