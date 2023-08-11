@@ -383,7 +383,7 @@ router.post('/hys_validate', async (req, res) => {
     // For rechecking purposes
     if (req.body.premiumKey) {
         const results = await subscriptionsSchema.findOne({ paymentId: req.body.premiumKey });
-        if (results && results.activated) {
+        if (results && new Date().valueOf() < results?.expires) {
             res.send({ message: true });
         } else {
             res.send({ error: 'Subscription not activated' });
