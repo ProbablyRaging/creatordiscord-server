@@ -12,6 +12,10 @@ const subscriptionsSchema = mongoose.Schema({
     activated: {
         type: Boolean,
         require: false
+    },
+    expires: {
+        type: String,
+        require: false
     }
 });
 

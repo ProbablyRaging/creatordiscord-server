@@ -1,6 +1,7 @@
 const cronjob = require('cron').CronJob;
 const videoList = require('../schema/video_list');
 const extUsers = require('../schema/users');
+const subscriptionsSchema = require('../schema/subscriptions');
 const fetch = require('node-fetch');
 
 module.exports = async () => {
@@ -79,4 +80,15 @@ module.exports = async () => {
         }
     });
     resetTokenCaps.start();
+
+    // Check for expired HYS subscriptions
+    const clearExpiredSubs = new cronjob('0 0 * * *', async function () {
+        const subscriptionResults = await subscriptionsSchema.find();
+        for (const data of subscriptionResults) {
+            if (new Date().valueOf() > data.expires) {
+                await subscriptionsSchema.deleteOne({ paymentId: data.paymentId });
+            }
+        }
+    });
+    clearExpiredSubs.start();
 }

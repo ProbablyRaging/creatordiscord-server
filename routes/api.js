@@ -331,20 +331,23 @@ const stripe = require('stripe')(process.env.STRIPE_SK);
 router.post('/payment_success', async (req, res) => {
     const paymentIntent = req.body.data.object;
     const paymentType = req.body.type;
-    const paymentDescription = paymentIntent.description;
     const paymentId = paymentIntent.id;
     const customerId = paymentIntent.customer;
-    const paymentAmount = paymentIntent.amount;
-    if (paymentType === 'charge.succeeded' && paymentDescription === 'Subscription creation' && paymentAmount === 500) {
+    if (paymentType === 'customer.subscription.created' || paymentType === 'customer.subscription.updated') {
         stripe.customers.retrieve(customerId, (err, customer) => {
             if (!err && customer) {
                 const customerEmail = customer.email;
-                console.log(customerEmail);
+                const planEndTimestamp = paymentIntent.current_period_end + 86400;
                 try {
-                    subscriptionsSchema.create({
-                        paymentId: paymentId,
+                    subscriptionsSchema.updateOne({
                         customerEmail: customerEmail
-                    });
+                    }, {
+                        paymentId: paymentId,
+                        customerEmail: customerEmail,
+                        expires: planEndTimestamp
+                    }, {
+                        upsert: true
+                    }).exec();
                 } catch (err) {
                     console.error('There was a problem : ', err);
                 }
@@ -360,7 +363,7 @@ router.post('/hys_validate', async (req, res) => {
     // Initial validation
     if (req.body.email) {
         const results = await subscriptionsSchema.findOne({ customerEmail: req.body.email.toLowerCase() });
-        if (results && results.paymentId) {
+        if (results && new Date().valueOf() < results?.expires) {
             if (!results.activated) {
                 subscriptionsSchema.updateOne({
                     customerEmail: req.body.email.toLowerCase()
@@ -369,12 +372,12 @@ router.post('/hys_validate', async (req, res) => {
                 }, {
                     upsert: true
                 }).exec();
-                res.send({ message: results.paymentId });
+                res.send({ message: results.customerEmail });
             } else {
                 res.send({ error: 'This email has already been used to activate a subscription. If you need to reset your activation please contact us at dev@hideshorts.com' });
             }
         } else {
-            res.send({ error: 'A subscription for this email does not exist' });
+            res.send({ error: 'A subscription for this email does not exist or has expired' });
         }
     }
     // For rechecking purposes
