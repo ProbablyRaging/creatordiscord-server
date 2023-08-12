@@ -359,11 +359,10 @@ router.post('/payment_success', async (req, res) => {
     res.sendStatus(200);
 });
 
-router.post('/hys_validate', async (req, res) => {
+router.post('/hys_activate', async (req, res) => {
     // Initial validation
     if (req.body.email) {
         const results = await subscriptionsSchema.findOne({ customerEmail: req.body.email.toLowerCase() });
-        console.log(new Date().valueOf() < results?.expires);
         if (results && new Date().valueOf() < results?.expires) {
             if (!results.activated) {
                 subscriptionsSchema.updateOne({
@@ -383,12 +382,11 @@ router.post('/hys_validate', async (req, res) => {
     }
     // For rechecking purposes
     if (req.body.premiumKey) {
-        const results = await subscriptionsSchema.findOne({ paymentId: req.body.customerEmail });
-        console.log(new Date().valueOf() < results?.expires);
-        if (results && new Date().valueOf() < results?.expires) {
+        const results = await subscriptionsSchema.findOne({ customerEmail: req.body.premiumKey });
+        if (results && new Date().valueOf() < results?.expires && results?.activated) {
             res.send({ message: true });
         } else {
-            res.send({ error: 'Subscription not activated' });
+            res.send({ error: 'Subscription not activated or has expired' });
         }
     }
 });
