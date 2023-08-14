@@ -382,7 +382,7 @@ router.post('/hys_activate', async (req, res) => {
     }
     // For rechecking purposes
     if (req.body.premiumKey) {
-        const results = await subscriptionsSchema.findOne({ customerEmail: req.body.premiumKey });
+        const results = await subscriptionsSchema.findOne({ customerEmail: req.body.premiumKey.toLowerCase() });
         if (results && new Date().valueOf() < results?.expires && results?.activated) {
             res.send({ message: true });
         } else {
