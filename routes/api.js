@@ -336,7 +336,7 @@ router.post('/payment_success', async (req, res) => {
     if (paymentType === 'customer.subscription.created' || paymentType === 'customer.subscription.updated') {
         stripe.customers.retrieve(customerId, (err, customer) => {
             if (!err && customer) {
-                const customerEmail = customer.email;
+                const customerEmail = customer.email.toLowerCase();
                 const planEndTimestamp = (paymentIntent.current_period_end + 86400) * 1000;
                 try {
                     subscriptionsSchema.updateOne({
@@ -372,7 +372,7 @@ router.post('/hys_activate', async (req, res) => {
                 }, {
                     upsert: true
                 }).exec();
-                res.send({ message: results.customerEmail });
+                res.send({ message: results.customerEmail.toLowerCase() });
             } else {
                 res.send({ error: 'This email has already been used to activate a subscription. If you need to reset your activation please contact us at dev@hideshorts.com' });
             }
