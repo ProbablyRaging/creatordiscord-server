@@ -85,8 +85,8 @@ module.exports = async () => {
     const clearExpiredSubs = new cronjob('0 0 * * *', async function () {
         const subscriptionResults = await subscriptionsSchema.find();
         for (const data of subscriptionResults) {
-            if (new Date().valueOf() > data.expires) {
-                await subscriptionsSchema.deleteOne({ paymentId: data.paymentId });
+            if (new Date().valueOf() > data?.expires) {
+                await subscriptionsSchema.deleteOne({ customerEmail: data.customerEmail });
             }
         }
     });
