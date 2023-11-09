@@ -522,7 +522,7 @@ router.get('/ghrepos', async (req, res) => {
         }
     });
     const response = await githubRepos.json();
-    res.send({ data: response });
+    res.send({ response });
 });
 
 module.exports = router;
