@@ -495,25 +495,27 @@ router.post('/validate', (req, res) => {
 });
 
 router.get('/ghrepos', async (req, res) => {
-    const githubRepos = await fetch(`https://api.github.com/graphql`, {
-        method: 'POST',
-        body: JSON.stringify(`{
-            user(login: "ProbablyRaging") {
-              pinnedItems(first: 6, types: REPOSITORY) {
-                nodes {
-                  ... on Repository {
-                    name
-                    description
-                    stargazerCount
-                    forkCount
-                    primaryLanguage {
-                      name
-                    }
-                  }
+    const query = `{
+        user(login: "ProbablyRaging") {
+          pinnedItems(first: 6, types: REPOSITORY) {
+            nodes {
+              ... on Repository {
+                name
+                description
+                stargazerCount
+                forkCount
+                primaryLanguage {
+                  name
                 }
               }
             }
-          }`),
+          }
+        }
+      }`;
+
+    const githubRepos = await fetch(`https://api.github.com/graphql`, {
+        method: 'POST',
+        body: JSON.stringify({ query }),
         headers: {
             Authorization: `Bearer ${process.env.GH_TOKEN}`,
             'Content-Type': 'application/json'
