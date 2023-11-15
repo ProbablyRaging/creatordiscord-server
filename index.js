@@ -42,7 +42,10 @@ app.use(session({
     name: 'distubify.sid',
     cookie: {
         maxAge: 60000 * 60 * 24,
-        httpOnly: false
+        httpOnly: false,
+        domain: 'localhost',
+        secure: false,
+        sameSite: 'none'
     },
     saveUninitialized: false,
     resave: false,
