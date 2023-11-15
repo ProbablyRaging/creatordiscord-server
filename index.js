@@ -38,13 +38,13 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(session({
-    secret: 'somesecret',
-    name: 'boopsession',
+    name: 'test_cookie',
     cookie: {
         maxAge: 60000 * 60 * 24
     },
     saveUninitialized: false,
-    resave: false
+    resave: false,
+    httpOnly: false,
 }));
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
