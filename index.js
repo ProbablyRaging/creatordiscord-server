@@ -33,7 +33,6 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(session({
     secret: 'secret',
-    name: 'distubify.sid',
     cookie: {
         maxAge: 60000 * 60 * 24,
         httpOnly: false,
