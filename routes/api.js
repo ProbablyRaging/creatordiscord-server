@@ -9,7 +9,7 @@ const fetch = require('node-fetch');
 const { default: axios } = require('axios');
 
 router.post('/validate', async (req, res) => {
-    console.log(req);
+    console.log(req.session);
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         const results = await extUsers.findOne({ sessionId: req.body.data });
