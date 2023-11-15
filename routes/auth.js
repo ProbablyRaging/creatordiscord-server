@@ -86,7 +86,8 @@ router.get('/success', async (req, res, next) => {
         secure: true,
         httpOnly: false,
         sameSite: 'None',
-        domain: 'probablyraging.dev'
+        domain: '.probablyraging.dev',
+        path: '/distubify'
     });
     await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
     res.redirect('https://probablyraging.dev/distubify');
