@@ -44,7 +44,7 @@ app.use(session({
         maxAge: 60000 * 60 * 24,
         httpOnly: false,
         domain: 'http://localhost:5173',
-        secure: false,
+        secure: true,
         sameSite: 'none',
         path: '/distubify'
     },
