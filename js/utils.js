@@ -67,7 +67,7 @@ async function getYouTubeVideoData(req, res, videoId) {
                 views: formatNumber(videoStats.viewCount),
                 videoId: videoId,
                 url: `https://www.youtube.com/watch?v=${videoId}`,
-                thumbnail: videoSnippet.thumbnails.high.url,
+                thumbnail: videoSnippet.thumbnails.medium.url,
                 userId: req.body.userId,
                 platform: 'youtube',
                 dateAdded: new Date()
