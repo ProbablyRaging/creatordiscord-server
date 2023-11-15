@@ -39,13 +39,13 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(session({
     secret: 'secret',
-    name: 'test_cookie',
+    name: 'distubify.sid',
     cookie: {
-        maxAge: 60000 * 60 * 24
+        maxAge: 60000 * 60 * 24,
+        httpOnly: false
     },
     saveUninitialized: false,
     resave: false,
-    httpOnly: false,
 }));
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
