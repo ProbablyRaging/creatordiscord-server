@@ -81,15 +81,9 @@ router.get('/redirect', async (req, res, next) => {
 });
 
 router.get('/success', async (req, res, next) => {
-    const origin = req.headers?.origin;
-    console.log(req.headers);
-    if (origin && origin.includes(process.env.API_KEY)) {
-        await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
-        res.redirect(`https://probablyraging.dev/distubify?auth=${req.sessionID}`);
-    } else if (origin && origin.includes(process.env.API_KEY_DEV)) {
-        await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
-        res.redirect(`http://localhost:5173/distubify/?auth=${req.sessionID}`);
-    }
+    await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
+    // res.redirect(`https://probablyraging.dev/distubify?auth=${req.sessionID}`); // LIVE
+    res.redirect(`http://localhost:5173/distubify?auth=${req.sessionID}`); // DEV
 });
 
 module.exports = router;
