@@ -153,7 +153,7 @@ router.post('/logout', async (req, res) => {
                 expires: null,
                 sessionId: null
             }, {
-                upsert: true
+                upsert: false
             }).exec();
             res.send({ message: 'Successfully logged out' });
         } catch (err) {
