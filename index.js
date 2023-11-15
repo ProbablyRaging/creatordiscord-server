@@ -38,7 +38,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(session({
-    secret: 'some secret',
+    secret: 'some.secret',
     cookie: {
         maxAge: 60000 * 60 * 24
     },
