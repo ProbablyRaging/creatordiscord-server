@@ -315,7 +315,7 @@ router.post('/deleteresource', async (req, res) => {
     }
 });
 
-router.post('/validate', (req, res) => {
+router.post('/validates', (req, res) => {
     const origin = req.headers?.referer;
     if (origin && (origin.includes('creatordiscord.xyz') || origin.includes('localhost') || origin.includes('127.0.0.1'))) {
         try {
