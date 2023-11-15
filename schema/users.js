@@ -9,6 +9,10 @@ const usersSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    avatar: {
+        type: String,
+        required: true
+    },
     accessToken: {
         type: String,
         required: true
@@ -17,41 +21,13 @@ const usersSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    expires: {
+    sessionId: {
         type: String,
         required: true
     },
-    tokens: {
-        type: Number,
-        required: false
-    },
-    tokenCap: {
-        type: Number,
-        required: false
-    },
-    views: {
-        type: Number,
-        required: false
-    },
-    likes: {
-        type: Number,
-        required: false
-    },
-    submissions: {
-        type: Number,
-        required: false
-    },
-    watches: {
-        type: Number,
-        required: false
-    },
-    prevSubmissions: {
-        type: Number,
-        required: false
-    },
-    prevViews: {
-        type: Number,
-        required: false
+    expires: {
+        type: String,
+        required: true
     }
 });
 

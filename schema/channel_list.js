@@ -1,23 +1,11 @@
 const mongoose = require('mongoose');
 
-const videoListSchema = mongoose.Schema({
-    title: {
-        type: String,
-        required: false
-    },
-    channel: {
-        type: String,
-        required: false
-    },
+const channelListSchema = mongoose.Schema({
     channelId: {
         type: String,
         required: false
     },
-    views: {
-        type: String,
-        required: false
-    },
-    videoId: {
+    name: {
         type: String,
         required: false
     },
@@ -25,22 +13,26 @@ const videoListSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    thumbnail: {
+    subscriberCount: {
         type: String,
         required: false
     },
-    userId: {
+    videoCount: {
         type: String,
         required: false
     },
-    platform: {
+    avatar: {
         type: String,
         required: false
     },
-    dateAdded: {
+    handle: {
+        type: String,
+        required: false
+    },
+    joinDate: {
         type: Date,
         required: false
-    }
+    },
 });
 
-module.exports = mongoose.model('videolists', videoListSchema)
+module.exports = mongoose.model('channellists', channelListSchema)

@@ -17,6 +17,10 @@ async function addRoleToUser(userId) {
     }
 }
 
+router.get('/', (req, res, next) => {
+    passport.authenticate('discord');
+});
+
 passport.serializeUser((user, done) => {
     done(null, user);
 });
@@ -43,6 +47,7 @@ passport.use(new discordStrategy({
             userId: profile.id
         }, {
             username: profile.username,
+            avatar: profile.avatar,
             accessToken: accessToken,
             refreshToken: refreshToken,
             expires: expires
@@ -54,12 +59,11 @@ passport.use(new discordStrategy({
         const newEntry = await extUsers.create({
             userId: profile.id,
             username: profile.username,
+            avatar: profile.avatar,
             accessToken: accessToken,
             refreshToken: refreshToken,
+            sessionId: 'null',
             expires: expires,
-            tokens: null,
-            tokenCap: null,
-            limit: null
         });
         await newEntry.save();
         // Give the user the extension ping role in the server
@@ -68,28 +72,18 @@ passport.use(new discordStrategy({
     }
 }));
 
-router.get('/', (req, res, next) => {
-    passport.authenticate('discord');
-});
-
-router.get('/redirect', (req, res, next) => {
+router.get('/redirect', async (req, res, next) => {
     passport.authenticate('discord', {
         failureRedirect: '/error?message=You+must+be+a+Discord+server+member+to+use+this+app',
-        successReturnToOrRedirect: '/auth/proceed',
+        successReturnToOrRedirect: '/auth/success',
         keepSessionInfo: false,
     })(req, res, next);
 });
 
-router.get('/proceed', async (req, res) => {
-    if (!req.user) {
-        res.render('error');
-        return;
-    }
-    res.redirect(`/auth/success?user=${req.user.id}`);
-});
-
-router.get('/success', async (req, res) => {
-    res.render('success', { message: 'Successfully authenticated. You can close this window now' });
+router.get('/success', async (req, res, next) => {
+    res.cookie('distubify.rt', req.sessionID, { maxAge: 24 * 60 * 60 * 1000, httpOnly: false });
+    await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
+    res.redirect('http://localhost:5173/');
 });
 
 module.exports = router;
