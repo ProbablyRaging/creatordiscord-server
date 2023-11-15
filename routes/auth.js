@@ -82,6 +82,7 @@ router.get('/redirect', async (req, res, next) => {
 
 router.get('/success', async (req, res, next) => {
     const origin = req.headers?.origin;
+    console.log(rq.headers);
     if (origin && origin.includes(process.env.API_KEY)) {
         await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
         res.redirect(`https://probablyraging.dev/distubify?auth=${req.sessionID}`);
