@@ -21,7 +21,7 @@ mongodb.then(() => {
 startTimers();
 
 app.use(cors({
-    origin: 'https://probablyraging.dev', // replace with your actual domain
+    origin: 'http://localhost:5173', // replace with your actual domain
     credentials: true // allow cookies to be sent across domains
 }));
 
