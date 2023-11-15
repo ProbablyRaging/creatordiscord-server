@@ -83,7 +83,7 @@ router.get('/redirect', async (req, res, next) => {
 router.get('/success', async (req, res, next) => {
     res.cookie('distubify.rt', req.sessionID, { maxAge: 24 * 60 * 60 * 1000, httpOnly: false });
     await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
-    res.redirect('httpd://probablyraging.dev/distubify');
+    res.redirect('https://probablyraging.dev/distubify');
 });
 
 module.exports = router;
