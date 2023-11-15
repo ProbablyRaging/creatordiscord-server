@@ -9,7 +9,6 @@ const passport = require('passport');
 const session = require('express-session');
 const startTimers = require('./js/timers');
 const path = require('path');
-const cors = require('cors');
 
 // Connect to the database
 mongodb.then(() => {
@@ -19,11 +18,6 @@ mongodb.then(() => {
 });
 
 startTimers();
-
-app.use(cors({
-    origin: 'http://localhost:5173', // replace with your actual domain
-    credentials: true // allow cookies to be sent across domains
-}));
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
