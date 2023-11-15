@@ -84,9 +84,6 @@ router.get('/success', async (req, res, next) => {
     res.cookie('distubify.rt', req.sessionID, {
         maxAge: 24 * 60 * 60 * 1000,
         httpOnly: false,
-        secure: true,
-        sameSite: 'None',
-        domain: 'probablyraging.dev'
     });
     await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
     res.redirect('https://probablyraging.dev/distubify');
