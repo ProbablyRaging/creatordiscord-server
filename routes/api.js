@@ -17,6 +17,7 @@ router.post('/validate', async (req, res) => {
 });
 
 router.get('/videolist', async (req, res) => {
+    console.log(req.headers);
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
