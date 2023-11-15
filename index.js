@@ -43,9 +43,6 @@ app.use(session({
     cookie: {
         maxAge: 60000 * 60 * 24,
         httpOnly: false,
-        domain: 'http://localhost:5173',
-        secure: false,
-        sameSite: 'none'
     },
     saveUninitialized: false,
     resave: false,
