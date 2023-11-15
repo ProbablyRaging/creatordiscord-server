@@ -76,7 +76,7 @@ router.get('/redirect', async (req, res, next) => {
     passport.authenticate('discord', {
         failureRedirect: '/error?message=You+must+be+a+Discord+server+member+to+use+this+app',
         successReturnToOrRedirect: '/auth/success',
-        keepSessionInfo: false,
+        keepSessionInfo: true,
     })(req, res, next);
 });
 
