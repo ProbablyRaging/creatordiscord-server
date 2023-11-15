@@ -4,6 +4,34 @@ const extUsers = require('../schema/users');
 const fetch = require('node-fetch');
 
 module.exports = async () => {
+    // Null expired session
+    const nullExpiresSession = new cronjob('0 * * * *', async function () {
+        const results = await extUsers.find();
+        for (const data of results) {
+            try {
+                // Session has expired
+                const oneDay = 24 * 60 * 60 * 1000;
+                if (data.expires && data.expires < (new Date().valueOf() - oneDay)) {
+                    await extUsers.findOneAndUpdate({ userId: data.userId }, { sessionId: null, expires: null });
+                }
+                // // Not longer in the server
+                // const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${data.userId}`, {
+                //     method: 'GET',
+                //     headers: { Authorization: `${process.env.API_TOKEN}` }
+                // });
+                // if (response.statusText === 'Not Found') {
+                //     await extUsers.deleteOne({ _id: data._id });
+                // }
+            } catch (err) {
+                console.log('There was a problem : ', err);
+            }
+        }
+    });
+    nullExpiresSession.start();
+
+
+
+
     // await videoList.deleteMany({ videoId: 'HYTb75LSFBc' })
 
     // let int = 0;
@@ -23,7 +51,6 @@ module.exports = async () => {
     //     int++
     //     console.log(`Done: `, int);
     // }, 500);
-
 
     // // Update user stats and clear video list
     // const removeExpiredVideos = new cronjob('*/5 * * * *', async function () {
@@ -58,33 +85,33 @@ module.exports = async () => {
 
     // // Remove entries from users who no longer exist in the server or have no
     // // used the extension in over a month
-    // const removeOldUser = new cronjob('0 0 * * *', async function () {
-    //     const results = await extUsers.find();
-    //     for (const data of results) {
-    //         try {
-    //             // Not longer in server
-    //             const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${data.userId}`, {
-    //                 method: 'GET',
-    //                 headers: {
-    //                     Authorization: `${process.env.API_TOKEN}`
-    //                 }
-    //             });
-    //             if (response.statusText === 'Not Found') {
-    //                 await extUsers.deleteOne({ _id: data._id });
-    //                 console.log(`Removed ${data.userId}. Reason: ${response.statusText}`);
-    //             }
-    //             // Not used extension in a month
-    //             const oneMonth = 30 * 24 * 60 * 60 * 1000;
-    //             if (data.expires && data.expires < (new Date().valueOf() - oneMonth)) {
-    //                 await extUsers.deleteOne({ _id: data._id });
-    //                 console.log(`Removed ${data.userId}. Reason: Stale account`);
-    //             }
-    //         } catch (err) {
-    //             console.log('There was a problem : ', err);
-    //         }
-    //     }
-    // });
-    // removeOldUser.start();
+    const removeOldUser = new cronjob('0 0 * * *', async function () {
+        const results = await extUsers.find();
+        for (const data of results) {
+            try {
+                // Not longer in server
+                const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${data.userId}`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `${process.env.API_TOKEN}`
+                    }
+                });
+                if (response.statusText === 'Not Found') {
+                    await extUsers.deleteOne({ _id: data._id });
+                    console.log(`Removed ${data.userId}. Reason: ${response.statusText}`);
+                }
+                // Not used extension in a month
+                const oneMonth = 30 * 24 * 60 * 60 * 1000;
+                if (data.expires && data.expires < (new Date().valueOf() - oneMonth)) {
+                    await extUsers.deleteOne({ _id: data._id });
+                    console.log(`Removed ${data.userId}. Reason: Stale account`);
+                }
+            } catch (err) {
+                console.log('There was a problem : ', err);
+            }
+        }
+    });
+    removeOldUser.start();
 
     // // Reset token caps
     // const resetTokenCaps = new cronjob('0 0 * * *', async function () {
