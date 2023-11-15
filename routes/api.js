@@ -79,7 +79,7 @@ router.post('/filter', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
-            if (req.body.data === 'newest') {
+            if (req.body.data === 'all' || req.body.data === 'newest') {
                 const results = await videoList.find().sort({ dateAdded: -1 });
                 if (results.length < 1) {
                     res.send({ error: 'No videos found' });

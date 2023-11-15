@@ -14,7 +14,7 @@ module.exports = async () => {
                 if (data.expires && data.expires < (new Date().valueOf() - oneDay)) {
                     await extUsers.findOneAndUpdate({ userId: data.userId }, { sessionId: null, expires: null });
                 }
-                // // Not longer in the server
+                // // No longer in the server
                 // const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${data.userId}`, {
                 //     method: 'GET',
                 //     headers: { Authorization: `${process.env.API_TOKEN}` }
@@ -51,6 +51,11 @@ module.exports = async () => {
     //     int++
     //     console.log(`Done: `, int);
     // }, 500);
+
+
+
+
+
 
     // // Update user stats and clear video list
     // const removeExpiredVideos = new cronjob('*/5 * * * *', async function () {
