@@ -43,14 +43,11 @@ app.use(session({
     cookie: {
         maxAge: 60000 * 60 * 24,
         httpOnly: false,
-        domain: 'localhost',
-        secure: false,
-        sameSite: 'none',
-        path: '/distubify'
     },
     saveUninitialized: false,
     resave: false,
 }));
+
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
