@@ -37,6 +37,10 @@ const videoListSchema = mongoose.Schema({
         type: String,
         required: false
     },
+    comments: {
+        type: Array,
+        required: false
+    },
     dateAdded: {
         type: Date,
         required: false

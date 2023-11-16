@@ -37,6 +37,102 @@ router.get('/videolist', async (req, res) => {
     }
 });
 
+router.post('/videodata', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const result = await videoList.findOne({ videoId: req.body.data });
+
+            if (!result) {
+                res.send({ error: 'No video found' });
+            } else {
+                res.send({ videoData: result });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/channeldata', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const result = await channelList.findOne({ channelId: req.body.data });
+
+            if (!result) {
+                res.send({ error: 'No channel found' });
+            } else {
+                res.send({ channelData: result });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/getcomments', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const result = await videoList.findOne({ videoId: req.body.data });
+
+            if (!result) {
+                res.send({ error: `Could not find video with id ${req.body.data}` });
+            } else {
+                res.send({ data: result });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
+router.post('/addcomment', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const result = await videoList.findOne({ videoId: req.body.data.videoId });
+            const user = await extUsers.findOne({ sessionId: req.body.data.cookieValue });
+
+            if (!result) {
+                res.send({ error: `Could not find video with id ${req.body.data.videoId}` });
+            } else if (!user) {
+                res.send({ error: `Could not find user with id ${req.body.data.cookieValue}` });
+            } else {
+                const oldCommentData = result?.comments || [];
+                const newCommentObject = {
+                    userId: user.userId,
+                    username: user.username,
+                    avatar: user.avatar,
+                    comment: req.body.data.value,
+                };
+                const newCommentData = [...oldCommentData, newCommentObject];
+                await videoList.findOneAndUpdate({
+                    videoId: req.body.data.videoId
+                }, {
+                    comments: newCommentData
+                });
+                res.send({ message: 'Comment added' });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
 router.get('/channellist', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
