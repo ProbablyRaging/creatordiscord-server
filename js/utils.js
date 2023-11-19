@@ -76,7 +76,7 @@ async function getYouTubeVideoData(req, res, videoId) {
             // Get channel data
             getYouTubeChannelData(req, res, videoSnippet.channelId);
             // Send webhook message
-            axios.post(process.env.SUB_CHANNEL_WEBHOOK, { content: `**${req.body.userId} just added a new YouTube video! - https://distubify.xyz/v/${videoId}**` });
+            // axios.post(process.env.SUB_CHANNEL_WEBHOOK, { content: `**<@${req.user.userId}> just added a new YouTube video! - https://distubify.xyz/v/${videoId}**` });
         } else {
             res.send({ error: `This video has already been added` });
             return;
@@ -156,7 +156,7 @@ async function getTwitchVideoData(req, res, videoId) {
             // Get channel data
             getTwitchChannelData(req, res, videoData.user_id, accessToken);
             // Send webhook message
-            axios.post(process.env.SUB_CHANNEL_WEBHOOK, { content: `**${req.body.userId} just added a new Twitch video! - https://distubify.xyz/v/${videoId}**` });
+            // axios.post(process.env.SUB_CHANNEL_WEBHOOK, { content: `**<@${req.user.userId}> just added a new Twitch video! - https://distubify.xyz/v/${videoId}**` });
         } else {
             res.send({ error: `This video has already been added` });
             return;
