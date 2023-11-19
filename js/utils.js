@@ -102,7 +102,7 @@ async function getYouTubeChannelData(req, res, channelId) {
             channelList.create({
                 channelId: channelId,
                 name: channelSnippet.title,
-                url: `https://www.youtube.com/channel/${channelSnippet.customUrl}`,
+                url: `https://www.youtube.com/${channelSnippet.customUrl}`,
                 subscriberCount: formatNumber(channelStats.subscriberCount),
                 videoCount: formatNumber(channelStats.videoCount),
                 avatar: channelSnippet.thumbnails.default.url,
