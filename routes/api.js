@@ -213,6 +213,31 @@ router.post('/filter', async (req, res) => {
     }
 });
 
+router.post('/search', async (req, res) => {
+    const origin = req.headers?.origin;
+    if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
+        try {
+            const results = await videoList.find({
+                $or: [
+                    { title: { $regex: req.body.data, $options: 'i' } },
+                    { channel: { $regex: req.body.data, $options: 'i' } },
+                    { videoId: { $regex: req.body.data, $options: 'i' } },
+                    { platform: { $regex: req.body.data, $options: 'i' } }]
+            });
+            if (results.length < 1) {
+                res.send({ error: 'No videos found' });
+            } else {
+                res.send({ videoList: results });
+            }
+        } catch (err) {
+            res.send({ error: 'Unknown error occurred' });
+            console.error('There was a problem : ', err);
+        }
+    } else {
+        res.send({ message: 'Access denied' });
+    }
+});
+
 router.post('/addvideo_youtube', async (req, res) => {
     // const origin = req.headers?.origin;
     // if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
