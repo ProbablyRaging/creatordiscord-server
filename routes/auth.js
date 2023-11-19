@@ -82,7 +82,7 @@ router.get('/redirect', async (req, res, next) => {
 
 router.get('/success', async (req, res, next) => {
     await extUsers.findOneAndUpdate({ userId: req.user.id }, { sessionId: req.sessionID, });
-    res.redirect(`https://hideyoutubeshorts.xyz/?auth=${req.sessionID}`); // LIVE
+    res.redirect(`https://distubify.xyz/?auth=${req.sessionID}`); // LIVE
     // res.redirect(`http://localhost:5173/distubify/?auth=${req.sessionID}`); // DEV
 });
 

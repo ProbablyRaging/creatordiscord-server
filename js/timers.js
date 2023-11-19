@@ -10,7 +10,7 @@ module.exports = async () => {
         for (const data of results) {
             try {
                 // Session has expired
-                const oneDay = 24 * 60 * 60 * 1000;
+                const oneDay = 7 * 24 * 60 * 60 * 1000;
                 if (data.expires && data.expires < (new Date().valueOf() - oneDay)) {
                     await extUsers.findOneAndUpdate({ userId: data.userId }, { sessionId: null, expires: null });
                 }
