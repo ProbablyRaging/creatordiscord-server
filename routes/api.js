@@ -137,7 +137,7 @@ router.get('/channellist', async (req, res) => {
     const origin = req.headers?.origin;
     if (origin && (origin.includes(process.env.API_KEY) || origin.includes(process.env.API_KEY_DEV))) {
         try {
-            const results = await channelList.find().limit(10).sort({ channelName: 1 });
+            const results = await channelList.find().sort({ name: 1 });
             if (results.length < 1) {
                 res.send({ error: 'No channels found' });
             } else {
